@@ -4,7 +4,7 @@
 
 ### abstract
 
-PositionBasedDynamics is a method enables mechanical effects based on physics simulation in the graphics community. As opposed to PBA (Physically Based Animation) in the traditional industry, PBD offers more realistic visual effects and highly computationally efficient simulations because it compute the position changes in each simulation step directly([Miles Macklin 2013](https://doi.org/10.1145/2461912.2461984)). This project develops a position-based dynamics library according to algorithms and mathematical equations provided in academic researches. Afterwards, it adds features including XPBD constraints ([Miles Macklin 2016](https://doi.org/10.1145/2994258.2994272)), and gives compared results when implemented on deformable solids.
+PositionBasedDynamics is a method enables mechanical effects based on physics simulation in the graphics community. As opposed to PBA (Physically Based Animation) in the traditional industry, PBD offers more realistic visual effects and highly computationally efficient simulations because it compute the position changes in each simulation step directly([Miles Macklin 2007](https://www.sciencedirect.com/science/article/pii/S1047320307000065)). This project develops a position-based dynamics library according to algorithms and mathematical equations provided in academic researches. Afterwards, it adds features including XPBD constraints ([Miles Macklin 2016](https://doi.org/10.1145/2994258.2994272)), and gives compared results when implemented on deformable solids using real-time visualization with OpenGL.
 
 ### development environment
 
@@ -26,7 +26,7 @@ PositionBasedDynamics is a method enables mechanical effects based on physics si
 https://app.diagrams.net/
 
 ## Reference
-Miles Macklin and Matthias Müller. 2013. Position based fluids. ACM Trans. Graph. 32, 4, Article 104 (July 2013), 12 pages. https://doi.org/10.1145/2461912.2461984
+M¨uller M., Heidelberger B., Hennix M. and Ratcliff J., April 2007. Position based dynamics. J. Vis. Comun. Image Represent., 18(2),109–118. https://www.sciencedirect.com/science/article/pii/S1047320307000065
 
 Miles Macklin, Matthias Müller, and Nuttapong Chentanez. 2016. XPBD: position-based simulation of compliant constrained dynamics. In Proceedings of the 9th International Conference on Motion in Games (MIG '16). Association for Computing Machinery, New York, NY, USA, 49–54. https://doi.org/10.1145/2994258.2994272
 

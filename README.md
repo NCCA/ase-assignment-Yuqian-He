@@ -41,22 +41,23 @@ for each particle i do
   collision_constraints(p)=(p-qc).dot(nc); //qc is the poiont intersects the collider
 end
 // solver iterations step, do constraints projection
-foreach iteration do
+for each iteration do
   //solve distance_constraints,bending_constraints,collision_constraints
   for each constraint C do
     for each particle i affected by C do
       check if C approx 0;
-      modify date;
+      modify data;
     end
   end
 end
-//update date to use for next loop
+//update data to use for next loop
 for each particle i do
   update velocity v_i=(p_i-x_i)/deta_t;
   update position x_i=p_i;
 end
 ```
 ### Process Diagram
+![](assets/Process%20Diagram%20.png)
 
 ### Class Diagrams
 

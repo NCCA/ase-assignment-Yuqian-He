@@ -23,7 +23,42 @@ PositionBasedDynamics is a method enables mechanical effects based on physics si
 
 ## Class Design
 
-https://app.diagrams.net/
+### Algorithm Outline
+```c++
+// initialize position x_i, velocity v_i, mass w_i=1/m_i
+for each Particle i do
+  initialize x_i=x_0; v_i=v_0; w_i=1/m_0;
+end
+// explicit euler step for integrating the external force into velocity and update position
+for each Particle i do
+  v_i=v_i+deta_t*f_ext(x_i);
+  p_i=x_i+deta_t*v_i; //p is proposed target position of the particles
+end
+// generate collision constrains
+for each particle i do
+  distance_constraints(p1,p2)=Normalized(p1-P2)-d; 
+  bending_constraints(p1,p2,p3,p4)=acos(n1/Normalized(n1).dot(n2/Normalized(n2))); 
+  collision_constraints(p)=(p-qc).dot(nc); //qc is the poiont intersects the collider
+end
+// solver iterations step, do constraints projection
+foreach iteration do
+  //solve distance_constraints,bending_constraints,collision_constraints
+  for each constraint C do
+    for each particle i affected by C do
+      check if C approx 0;
+      modify date;
+    end
+  end
+end
+//update date to use for next loop
+for each particle i do
+  update velocity v_i=(p_i-x_i)/deta_t;
+  update position x_i=p_i;
+end
+```
+### Process Diagram
+
+### Class Diagrams
 
 ## Reference
 M¨uller M., Heidelberger B., Hennix M. and Ratcliff J., April 2007. Position based dynamics. J. Vis. Comun. Image Represent., 18(2),109–118. https://www.sciencedirect.com/science/article/pii/S1047320307000065

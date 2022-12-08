@@ -4,7 +4,9 @@
 
 ### abstract
 
-PositionBasedDynamics is a method enables mechanical effects based on physics simulation in the graphics community. As opposed to PBA (Physically Based Animation) in the traditional industry, PBD offers more realistic visual effects and highly computationally efficient simulations because it compute the position changes in each simulation step directly([Miles Macklin 2007](https://www.sciencedirect.com/science/article/pii/S1047320307000065)). This project develops a position-based dynamics library according to algorithms and mathematical equations provided in academic researches. Afterwards, it adds features including XPBD constraints ([Miles Macklin 2016](https://doi.org/10.1145/2994258.2994272)), and gives compared results when implemented on deformable solids using real-time visualization with OpenGL.
+PositionBasedDynamics is a method that enables mechanical effects based on physics simulation in the graphics community. As opposed to PBA (Physically Based Animation) in the traditional industry, PBD offers more realistic visual effects and highly computationally efficient simulations, it is capable of computing the position changes in each simulation step directly([Miles Macklin 2007](https://www.sciencedirect.com/science/article/pii/S1047320307000065)).
+
+The goal of this project is to develop a position-based dynamics library according to algorithms and mathematical equations provided in academic researches. Afterwards, it adds features including XPBD constraints ([Miles Macklin 2016](https://doi.org/10.1145/2994258.2994272)), and gives compared results when implemented on deformable solids using real-time visualization with OpenGL.
 
 ### development environment
 

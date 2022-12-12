@@ -42,14 +42,17 @@ add_executable(${TargetName})
 include_directories(include $ENV{HOME}/NGL/include)
 target_sources(${TargetName} PRIVATE ${PROJECT_SOURCE_DIR}/src/main.cpp  
 			${PROJECT_SOURCE_DIR}/src/NGLScene.cpp  
+            ${PROJECT_SOURCE_DIR}/src/Generator.cpp
 			${PROJECT_SOURCE_DIR}/src/NGLSceneMouseControls.cpp  
-			${PROJECT_SOURCE_DIR}/include/NGLScene.h  
+			${PROJECT_SOURCE_DIR}/include/NGLScene.h
+            ${PROJECT_SOURCE_DIR}/include/Particle.h
+            ${PROJECT_SOURCE_DIR}/include/Generator.h  
 )
 
 target_link_libraries(${TargetName} PRIVATE Qt::Widgets Qt::OpenGL NGL)
 
-#add_custom_target(${TargetName}CopyShaders ALL
-#    COMMAND ${CMAKE_COMMAND} -E copy_directory
-#    ${CMAKE_CURRENT_SOURCE_DIR}/shaders
-#    $<TARGET_FILE_DIR:${TargetName}>/shaders
-#)
+add_custom_target(${TargetName}CopyShaders ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/shaders
+    $<TARGET_FILE_DIR:${TargetName}>/shaders
+)

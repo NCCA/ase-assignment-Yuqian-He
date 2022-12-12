@@ -2,6 +2,9 @@
 #define NGLSCENE_H_
 #include <ngl/Vec3.h>
 #include "WindowParams.h"
+#include<memory>
+#include "Generator.h"
+#include <ngl/Mat4.h>
 // this must be included after NGL includes else we get a clash with gl libs
 #include <QOpenGLWindow>
 //----------------------------------------------------------------------------------------------------------------------
@@ -74,11 +77,15 @@ private:
     /// @param _event the Qt Event structure
     //----------------------------------------------------------------------------------------------------------------------
     void wheelEvent( QWheelEvent *_event) override;
+    void timerEvent(QTimerEvent *_event) override;
     /// @brief windows parameters for mouse control etc.
     WinParams m_win;
     /// position for our model
     ngl::Vec3 m_modelPos;
-
+    std::unique_ptr<Generator> m_generator;
+    ngl::Mat4 m_mouseGlobalTX;
+    ngl::Mat4 m_view;
+    ngl::Mat4 m_project;
 };
 
 

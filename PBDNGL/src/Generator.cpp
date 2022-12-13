@@ -9,22 +9,58 @@
 Generator::Generator(size_t _numParticle)
 {
     m_particles.resize(_numParticle);
-
-    //test render
-    m_particles[0].m_position.set(0.0f,0.0f,0.0f);
-    m_particles[1].m_position.set(1.0f,0.0f,0.0f);  
+    
+    int i=0;
     for(auto &p : m_particles)
     {
-        createParticle(p);
+        p.m_position.set(0.0f,0.0f+i,0.0f);
+        p.m_colour=ngl::Random::getRandomColour3();
+        i++;
     }
     m_vao=ngl::VAOFactory::createVAO(ngl::simpleVAO,GL_POINTS);
 
 }
 
-void Generator::createParticle(Particle &io_p)
+void Generator::set_particlePosition(Particle &i_p, float _x, float _y, float _z)
 {
-    //initialize the attribute of every particles
-    io_p.m_colour=ngl::Random::getRandomColour3();
+    i_p.m_position.set(_x, _y, _z);
+}
+
+ngl::Vec3 Generator::get_particlePosition(Particle &o_p)
+{
+    return o_p.m_position;
+}
+
+void Generator::set_particleExtForce(Particle &i_p, float _x, float _y, float _z)
+{
+    i_p.m_extForce.set(_x, _y, _z);
+}
+
+ngl::Vec3 Generator::get_particleExtForce(Particle &o_p)
+{
+    return o_p.m_extForce;
+}
+
+ngl::Vec3 Generator::get_particleProposedPosition(Particle &o_p)
+{
+    return o_p.m_proposedPosition;
+}
+
+ngl::Vec3 Generator::get_particleVelocity(Particle &o_p)
+{
+    return o_p.m_velocity;
+}
+
+void Generator::set_particleMass(Particle &i_p, size_t mass)
+{
+    if(mass == 0) i_p.m_inverseMass=1;
+    else i_p.m_inverseMass=1/mass;
+}
+
+size_t Generator::get_particleMass(Particle &o_p)
+{
+    if(o_p.m_inverseMass==0) return 10000;
+    else return 1/o_p.m_inverseMass;
 }
 
 size_t Generator::get_numParticles() const

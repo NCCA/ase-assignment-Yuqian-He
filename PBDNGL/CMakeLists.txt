@@ -57,7 +57,12 @@ include(GoogleTest)
 enable_testing()
 include_directories(include)
 add_executable(ParticleTest)
-target_sources(ParticleTest PRIVATE test/ParticleTest.cpp)
+target_sources(ParticleTest PRIVATE test/ParticleTest.cpp
+                ${PROJECT_SOURCE_DIR}/src/Generator.cpp
+                ${PROJECT_SOURCE_DIR}/include/Particle.h
+                ${PROJECT_SOURCE_DIR}/include/Generator.h  
+)
+
 target_link_libraries(ParticleTest PRIVATE GTest::gtest GTest::gtest_main)
 gtest_discover_tests(ParticleTest)
 

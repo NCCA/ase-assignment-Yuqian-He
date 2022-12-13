@@ -9,42 +9,25 @@
 Generator::Generator(size_t _numParticle)
 {
     m_particles.resize(_numParticle);
-    int i = 0;
-    
+
+    //test render
+    m_particles[0].m_position.set(0.0f,0.0f,0.0f);
+    m_particles[1].m_position.set(1.0f,0.0f,0.0f);  
     for(auto &p : m_particles)
     {
-        //initialize the attribute of every particles
-
-        p.m_colour=ngl::Random::getRandomColour3();
+        createParticle(p);
     }
-
-    //test render THIS IS WRONG
-    m_particles[0].m_position.set(0.0f,0.0f,0.0f);
-    m_particles[1].m_position.set(1.0f,0.0f,0.0f);   
-
-    m_particles[0].m_position.set(0.0f,0.0f,0.0f);
-    m_particles[5].m_position.set(0.0f,1.0f,0.0f);
-
-    m_particles[1].m_position.set(1.0f,0.0f,0.0f);
-    m_particles[2].m_position.set(2.0f,0.0f,0.0f);
-
-    m_particles[1].m_position.set(1.0f,0.0f,0.0f);
-    m_particles[4].m_position.set(1.0f,1.0f,0.0f);
-
-    m_particles[3].m_position.set(2.0f,1.0f,0.0f);
-    m_particles[2].m_position.set(2.0f,0.0f,0.0f);
-
-    m_particles[3].m_position.set(2.0f,1.0f,0.0f);
-    m_particles[4].m_position.set(1.0f,1.0f,0.0f);
-
-    m_particles[4].m_position.set(1.0f,1.0f,0.0f);
-    m_particles[5].m_position.set(0.0f,1.0f,0.0f);
-
-    m_vao=ngl::VAOFactory::createVAO(ngl::simpleVAO,GL_LINES);
+    m_vao=ngl::VAOFactory::createVAO(ngl::simpleVAO,GL_POINTS);
 
 }
 
-size_t Generator::numParticles() const
+void Generator::createParticle(Particle &io_p)
+{
+    //initialize the attribute of every particles
+    io_p.m_colour=ngl::Random::getRandomColour3();
+}
+
+size_t Generator::get_numParticles() const
 {
     return m_particles.size();
 }

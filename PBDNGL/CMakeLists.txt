@@ -43,13 +43,23 @@ include_directories(include $ENV{HOME}/NGL/include)
 target_sources(${TargetName} PRIVATE ${PROJECT_SOURCE_DIR}/src/main.cpp  
 			${PROJECT_SOURCE_DIR}/src/NGLScene.cpp  
             ${PROJECT_SOURCE_DIR}/src/Generator.cpp
-			${PROJECT_SOURCE_DIR}/src/NGLSceneMouseControls.cpp  
-			${PROJECT_SOURCE_DIR}/include/NGLScene.h
+			${PROJECT_SOURCE_DIR}/src/NGLSceneMouseControls.cpp			
+            ${PROJECT_SOURCE_DIR}/include/NGLScene.h
             ${PROJECT_SOURCE_DIR}/include/Particle.h
             ${PROJECT_SOURCE_DIR}/include/Generator.h  
 )
 
 target_link_libraries(${TargetName} PRIVATE Qt::Widgets Qt::OpenGL NGL)
+
+## add testing stuff
+find_package(GTest CONFIG REQUIRED)
+include(GoogleTest)
+enable_testing()
+include_directories(include)
+add_executable(ParticleTest)
+target_sources(ParticleTest PRIVATE test/ParticleTest.cpp)
+target_link_libraries(ParticleTest PRIVATE GTest::gtest GTest::gtest_main)
+gtest_discover_tests(ParticleTest)
 
 add_custom_target(${TargetName}CopyShaders ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory

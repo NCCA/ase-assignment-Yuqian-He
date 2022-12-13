@@ -11,7 +11,8 @@ class Generator
 {
     public:
     Generator(size_t _numParticle);
-    size_t numParticles() const;
+    void createParticle(Particle &io_p);
+    size_t get_numParticles() const;
     void update();
     void render() const;
 

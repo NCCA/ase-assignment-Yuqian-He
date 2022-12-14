@@ -17,10 +17,12 @@ class Generator
     ngl::Vec3 get_particlePosition(Particle &o_p);
     void set_particleExtForce(Particle &i_p, float _x, float _y, float _z);
     ngl::Vec3 get_particleExtForce(Particle &o_p);
+    void set_particleProposedPosition(Particle &o_p);
     ngl::Vec3 get_particleProposedPosition(Particle &o_p);
     ngl::Vec3 get_particleVelocity(Particle &o_p);
     void set_particleMass(Particle &i_p, size_t mass);
     size_t get_particleMass(Particle &o_p);
+    bool get_ifFixed(Particle &o_p);
 
     size_t get_numParticles() const;
     void update();

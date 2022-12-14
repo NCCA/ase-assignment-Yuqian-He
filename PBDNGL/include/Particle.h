@@ -10,7 +10,8 @@ struct Particle
     ngl::Vec3 m_proposedPosition;
     ngl::Vec3 m_colour;
     ngl::Vec3 m_velocity={0.0f,0.0f,0.0f};
-    size_t m_inverseMass=0.1;
+    float m_inverseMass=0.5;
+    bool m_ifFixed=false;
 };
 
 #endif

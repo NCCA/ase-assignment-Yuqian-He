@@ -29,4 +29,14 @@ TEST(Generator,construct)
 
     ASSERT_EQ(g.get_particleMass(g.m_particles[0]),10000);
     ASSERT_EQ(g.get_particleMass(g.m_particles[1]),10000);
+    ASSERT_EQ(g.get_ifFixed(g.m_particles[0]),false);
+}
+
+TEST(Generator,ParticleMove)
+{
+    auto g = Generator(2);
+    g.set_particleExtForce(g.m_particles[0],1.0f,1.0f,1.0f);
+    std::cout<<g.get_particleProposedPosition(g.m_particles[0]).m_x<<'\n';
+    std::cout<<g.get_particleProposedPosition(g.m_particles[0]).m_y<<'\n';
+    std::cout<<g.get_particleProposedPosition(g.m_particles[0]).m_z<<'\n';
 }

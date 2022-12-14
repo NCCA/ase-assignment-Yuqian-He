@@ -42,8 +42,8 @@ void NGLScene::initializeGL()
   glEnable(GL_DEPTH_TEST);
   // enable multisampling for smoother drawing
   glEnable(GL_MULTISAMPLE);
-  m_generator=std::make_unique<Generator>(6);
-  startTimer(10);
+  m_generator=std::make_unique<Generator>(1);
+
 
   //the basic color and shader
   ngl::ShaderLib::use(ngl::nglColourShader);
@@ -56,6 +56,10 @@ void NGLScene::initializeGL()
   ngl::ShaderLib::setUniform("MVP",m_project*m_view);
   //ngl::ShaderLib::setUniform("Colour",1.0f,0.0f,0.0f,1.0f);
   glPointSize(5);//easy to see the particle
+
+  //m_generator->set_particleExtForce(m_generator->m_particles[0],1.0f,0.0f,0.0f);
+  
+  startTimer(10);
 }
 
 void NGLScene::timerEvent(QTimerEvent *_event)

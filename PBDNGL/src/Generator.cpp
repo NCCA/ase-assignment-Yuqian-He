@@ -5,6 +5,9 @@
 #include <ngl/Random.h>
 #include<ngl/VAOFactory.h>
 #include<ngl/SimpleVAO.h>
+#include<string>
+
+const float delta_t=0.005;
 
 Generator::Generator(size_t _numParticle)
 {
@@ -23,6 +26,7 @@ Generator::Generator(size_t _numParticle)
 
 void Generator::set_particlePosition(Particle &i_p, float _x, float _y, float _z)
 {
+
     i_p.m_position.set(_x, _y, _z);
 }
 
@@ -39,6 +43,17 @@ void Generator::set_particleExtForce(Particle &i_p, float _x, float _y, float _z
 ngl::Vec3 Generator::get_particleExtForce(Particle &o_p)
 {
     return o_p.m_extForce;
+}
+
+void Generator::set_particleProposedPosition(Particle &o_p)
+{
+    
+    auto acceleration = o_p.m_extForce*o_p.m_inverseMass;
+    //std::cout<<o_p.m_extForce.m_x<<','<<o_p.m_extForce.m_y<<','<<o_p.m_extForce.m_y<<'\n';
+    //std::cout<<acceleration.m_x<<','<<acceleration.m_y<<','<<acceleration.m_y<<'\n';
+    o_p.m_velocity = o_p.m_velocity+delta_t*o_p.m_extForce;
+    //std::cout<<o_p.m_velocity.m_x<<','<<o_p.m_velocity.m_y<<','<<o_p.m_velocity.m_y<<'\n';
+    o_p.m_proposedPosition = o_p.m_position+delta_t*o_p.m_velocity;
 }
 
 ngl::Vec3 Generator::get_particleProposedPosition(Particle &o_p)
@@ -63,6 +78,11 @@ size_t Generator::get_particleMass(Particle &o_p)
     else return 1/o_p.m_inverseMass;
 }
 
+bool Generator::get_ifFixed(Particle &o_p) 
+{
+    return o_p.m_ifFixed;
+}
+
 size_t Generator::get_numParticles() const
 {
     return m_particles.size();
@@ -70,16 +90,14 @@ size_t Generator::get_numParticles() const
 
 void Generator::update()
 {
-    //std::cout<<"update\n";
-    float _dt=0.01;
+    for(auto &p : m_particles)
+    {
+        set_particleProposedPosition(p);
+        std::cout<<get_particleProposedPosition(p).m_x<<','<<get_particleProposedPosition(p).m_y<<','<<get_particleProposedPosition(p).m_z<<'\n';
+    }
 
-    //  ngl::Vec3 gravity(0,-9.81f,0);
-    // for(auto &p:m_particles)
-    // {
-    //     //direction=velocity
-    //     p.m_velocity+=gravity*_dt*0.5f; //formula: dt_s=1/2*gravity*(dt_t)^2
-    //     p.m_position+=p.m_velocity*_dt;
-    // }
+
+    //float _dt=0.01;
 
     //update the attribute of every particles
 }

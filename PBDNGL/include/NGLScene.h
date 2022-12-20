@@ -5,6 +5,7 @@
 #include<memory>
 #include "Generator.h"
 #include <ngl/Mat4.h>
+#include <ngl/Text.h>
 // this must be included after NGL includes else we get a clash with gl libs
 #include <QOpenGLWindow>
 //----------------------------------------------------------------------------------------------------------------------
@@ -86,6 +87,8 @@ private:
     ngl::Mat4 m_mouseGlobalTX;
     ngl::Mat4 m_view;
     ngl::Mat4 m_project;
+
+    std::unique_ptr<ngl::Text>m_text;
 };
 
 

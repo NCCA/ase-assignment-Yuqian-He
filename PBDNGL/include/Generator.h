@@ -3,33 +3,42 @@
 #include <cstddef>
 #include<Particle.h>
 #include<vector>
+#include<ngl/Vec3.h>
+#include<ngl/Vec4.h>
 #include<string_view>
-#include<ngl/AbstractVAO.h>
+#include<ngl/MultiBufferVAO.h>
 
 
 class Generator
 {
     public:
-    std::vector<Particle> m_particles;
+    
     Generator(size_t _numParticle);
     //accessor
-    void set_particlePosition(Particle &i_p, float _x, float _y, float _z);
-    ngl::Vec3 get_particlePosition(Particle &o_p);
-    void set_particleExtForce(Particle &i_p, float _x, float _y, float _z);
-    ngl::Vec3 get_particleExtForce(Particle &o_p);
-    void set_particleProposedPosition(Particle &o_p);
-    ngl::Vec3 get_particleProposedPosition(Particle &o_p);
-    ngl::Vec3 get_particleVelocity(Particle &o_p);
-    void set_particleMass(Particle &i_p, size_t mass);
-    size_t get_particleMass(Particle &o_p);
-    bool get_ifFixed(Particle &o_p);
+    void set_particlePosition(size_t _index, float _x, float _y, float _z);
+    ngl::Vec3 get_particlePosition(size_t _index);
+    void set_particleExtForce(size_t _index, float _x, float _y, float _z);
+    ngl::Vec3 get_particleExtForce(size_t _index);
+    void set_particleProposedPosition(size_t _index);
+    ngl::Vec3 get_particleProposedPosition(size_t _index);
+    ngl::Vec3 get_particleVelocity(size_t _index);
+    void set_particleMass(size_t _index, size_t mass);
+    size_t get_particleMass(size_t _index);
+    bool get_ifFixed(size_t _index);
 
     size_t get_numParticles() const;
     void update();
     void render() const;
 
     private:
-    std::unique_ptr<ngl::AbstractVAO> m_vao;
+    std::vector<ngl::Vec3> m_positions;
+    std::vector<ngl::Vec3> m_extForces;
+    std::vector<ngl::Vec3> m_proposedPositions;
+    std::vector<ngl::Vec3> m_colours;
+    std::vector<ngl::Vec3> m_velocities;
+    std::vector<float> m_inverseMasses;
+    std::vector<bool> m_ifFixeds;
+    std::unique_ptr<ngl::MultiBufferVAO> m_vao;
 
 };
 

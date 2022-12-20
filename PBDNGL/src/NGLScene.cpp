@@ -27,7 +27,7 @@ void NGLScene::resizeGL(int _w , int _h)
 {
   m_win.width  = static_cast<int>( _w * devicePixelRatio() );
   m_win.height = static_cast<int>( _h * devicePixelRatio() );
-  m_text->setScreenSize(_w,_h);
+  //m_text->setScreenSize(_w,_h);
 }
 
 const std::string_view ParticleShader="ParticleShader";
@@ -58,11 +58,11 @@ void NGLScene::initializeGL()
   //ngl::ShaderLib::setUniform("Colour",1.0f,0.0f,0.0f,1.0f);
   glPointSize(5);//easy to see the particle
 
-  //m_generator->set_particleExtForce(m_generator->m_particles[0],1.0f,0.0f,0.0f);
+  m_generator->set_particleExtForce(0,1.0f,0.0f,0.0f);
   
   //text
-  m_text=std::make_unique<ngl::Text>("fonts/FreeSans.ttf",18);
-  m_text->setColour(1.0f,1.0f,0.0f);
+  //m_text=std::make_unique<ngl::Text>("fonts/FreeSans.ttf",18);
+  //m_text->setColour(1.0f,1.0f,0.0f);
 
   startTimer(10);
 }
@@ -88,9 +88,9 @@ void NGLScene::paintGL()
 
   ngl::ShaderLib::setUniform("MVP",m_project*m_view*m_mouseGlobalTX);
   
-  ngl::ShaderLib::use(ParticleShader);
+  //ngl::ShaderLib::use(ParticleShader);
   m_generator->render();
-  m_text->renderText(10,680,"My Text is Here");
+  //m_text->renderText(10,680,"My Text is Here");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

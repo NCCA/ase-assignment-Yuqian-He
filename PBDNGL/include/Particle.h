@@ -3,6 +3,7 @@
 #include <ngl/Vec3.h>
 #include<cstddef>
 
+/*
 struct Particle
 {
     ngl::Vec3 m_position;
@@ -13,5 +14,6 @@ struct Particle
     float m_inverseMass=0.5;
     bool m_ifFixed=false;
 };
+*/
 
 #endif

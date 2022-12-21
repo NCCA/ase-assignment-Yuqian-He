@@ -1,10 +1,10 @@
 #include<gtest/gtest.h>
 #include"Particle.h"
-#include"Generator.h"
+#include"ParticleGenerator.h"
 
 TEST(Generator,construct)
 {
-    auto g = Generator(2);
+    auto g = particleGenerator(2);
     ASSERT_EQ(g.get_numParticles(),2);
     ASSERT_EQ(g.get_particlePosition(0).m_x,0);
     ASSERT_EQ(g.get_particlePosition(0).m_y,0);
@@ -34,7 +34,7 @@ TEST(Generator,construct)
 
 TEST(Generator,ParticleMove)
 {
-    auto g = Generator(2);
+    auto g = particleGenerator(2);
     g.set_particleExtForce(0,1.0f,1.0f,1.0f);
     std::cout<<g.get_particleProposedPosition(0).m_x<<'\n';
     std::cout<<g.get_particleProposedPosition(0).m_y<<'\n';

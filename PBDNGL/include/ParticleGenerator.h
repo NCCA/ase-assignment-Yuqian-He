@@ -1,5 +1,5 @@
-#ifndef GENERATOR_H_
-#define GENERATOR_H_
+#ifndef PARTICLEGENERATOR_H_
+#define PARTICLEGENERATOR_H_
 #include <cstddef>
 #include<Particle.h>
 #include<vector>
@@ -9,11 +9,11 @@
 #include<ngl/MultiBufferVAO.h>
 
 
-class Generator
+class particleGenerator
 {
     public:
     
-    Generator(size_t _numParticle);
+    particleGenerator(size_t _numParticle);
     //accessor
     void set_particlePosition(size_t _index, float _x, float _y, float _z);
     ngl::Vec3 get_particlePosition(size_t _index);

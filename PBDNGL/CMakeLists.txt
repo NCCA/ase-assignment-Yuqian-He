@@ -42,11 +42,11 @@ add_executable(${TargetName})
 include_directories(include $ENV{HOME}/NGL/include)
 target_sources(${TargetName} PRIVATE ${PROJECT_SOURCE_DIR}/src/main.cpp  
 			${PROJECT_SOURCE_DIR}/src/NGLScene.cpp  
-            ${PROJECT_SOURCE_DIR}/src/Generator.cpp
+            ${PROJECT_SOURCE_DIR}/src/ParticleGenerator.cpp
 			${PROJECT_SOURCE_DIR}/src/NGLSceneMouseControls.cpp			
             ${PROJECT_SOURCE_DIR}/include/NGLScene.h
             ${PROJECT_SOURCE_DIR}/include/Particle.h
-            ${PROJECT_SOURCE_DIR}/include/Generator.h  
+            ${PROJECT_SOURCE_DIR}/include/ParticleGenerator.h  
 )
 
 target_link_libraries(${TargetName} PRIVATE Qt::Widgets Qt::OpenGL NGL)
@@ -58,9 +58,9 @@ enable_testing()
 include_directories(include)
 add_executable(ParticleTest)
 target_sources(ParticleTest PRIVATE test/ParticleTest.cpp
-                ${PROJECT_SOURCE_DIR}/src/Generator.cpp
+                ${PROJECT_SOURCE_DIR}/src/ParticleGenerator.cpp
                 ${PROJECT_SOURCE_DIR}/include/Particle.h
-                ${PROJECT_SOURCE_DIR}/include/Generator.h  
+                ${PROJECT_SOURCE_DIR}/include/ParticleGenerator.h  
 )
 
 target_link_libraries(ParticleTest PRIVATE GTest::gtest GTest::gtest_main)

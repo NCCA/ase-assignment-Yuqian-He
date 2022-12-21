@@ -1,5 +1,5 @@
 #include<iostream>
-#include"Generator.h"
+#include"ParticleGenerator.h"
 #include<fstream>
 #include<sstream>
 #include <ngl/Random.h>
@@ -9,7 +9,7 @@
 
 const float delta_t=0.005;
 
-Generator::Generator(size_t _numParticle)
+particleGenerator::particleGenerator(size_t _numParticle)
 {
     m_positions.resize(_numParticle);
     m_extForces.resize(_numParticle);
@@ -52,28 +52,28 @@ Generator::Generator(size_t _numParticle)
     m_vao->unbind();
 }
 
-void Generator::set_particlePosition(size_t _index, float _x, float _y, float _z)
+void particleGenerator::set_particlePosition(size_t _index, float _x, float _y, float _z)
 {
 
     m_positions[_index].set(_x, _y, _z);
 }
 
-ngl::Vec3 Generator::get_particlePosition(size_t _index)
+ngl::Vec3 particleGenerator::get_particlePosition(size_t _index)
 {
     return m_positions[_index];
 }
 
-void Generator::set_particleExtForce(size_t _index, float _x, float _y, float _z)
+void particleGenerator::set_particleExtForce(size_t _index, float _x, float _y, float _z)
 {
     m_extForces[_index].set(_x, _y, _z);
 }
 
-ngl::Vec3 Generator::get_particleExtForce(size_t _index)
+ngl::Vec3 particleGenerator::get_particleExtForce(size_t _index)
 {
     return m_extForces[_index];
 }
 
-void Generator::set_particleProposedPosition(size_t _index)
+void particleGenerator::set_particleProposedPosition(size_t _index)
 {
     
     auto acceleration = m_extForces[_index]*m_inverseMasses[_index];
@@ -81,42 +81,42 @@ void Generator::set_particleProposedPosition(size_t _index)
     //std::cout<<acceleration.m_x<<','<<acceleration.m_y<<','<<acceleration.m_y<<'\n';
     m_velocities[_index] = m_velocities[_index]+delta_t*m_extForces[_index];
     //std::cout<<o_p.m_velocity.m_x<<','<<o_p.m_velocity.m_y<<','<<o_p.m_velocity.m_y<<'\n';
-    m_positions[_index] = m_positions[_index]+delta_t*m_velocities[_index];
+    m_proposedPositions[_index] = m_positions[_index]+delta_t*m_velocities[_index];
 }
 
-ngl::Vec3 Generator::get_particleProposedPosition(size_t _index)
+ngl::Vec3 particleGenerator::get_particleProposedPosition(size_t _index)
 {
     return m_proposedPositions[_index];
 }
 
-ngl::Vec3 Generator::get_particleVelocity(size_t _index)
+ngl::Vec3 particleGenerator::get_particleVelocity(size_t _index)
 {
     return m_velocities[_index];
 }
 
-void Generator::set_particleMass(size_t _index, size_t mass)
+void particleGenerator::set_particleMass(size_t _index, size_t mass)
 {
     if(mass == 0) m_inverseMasses[_index]=1;
     else m_inverseMasses[_index]=1/mass;
 }
 
-size_t Generator::get_particleMass(size_t _index)
+size_t particleGenerator::get_particleMass(size_t _index)
 {
     if(m_inverseMasses[_index]==0) return 10000;
     else return 1/m_inverseMasses[_index];
 }
 
-bool Generator::get_ifFixed(size_t _index) 
+bool particleGenerator::get_ifFixed(size_t _index) 
 {
     return m_ifFixeds[_index];
 }
 
-size_t Generator::get_numParticles() const
+size_t particleGenerator::get_numParticles() const
 {
     return m_positions.size();
 }
 
-void Generator::update()
+void particleGenerator::update()
 {
     for(size_t i=0; i<m_positions.size(); ++i)
     {
@@ -130,7 +130,7 @@ void Generator::update()
     //update the attribute of every particles
 }
 
-void Generator::render() const
+void particleGenerator::render() const
 {
     glPointSize(4);
     m_vao->bind();

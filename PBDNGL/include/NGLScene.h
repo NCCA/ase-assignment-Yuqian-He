@@ -3,7 +3,7 @@
 #include <ngl/Vec3.h>
 #include "WindowParams.h"
 #include<memory>
-#include "Generator.h"
+#include "ParticleGenerator.h"
 #include <ngl/Mat4.h>
 #include <ngl/Text.h>
 // this must be included after NGL includes else we get a clash with gl libs
@@ -83,7 +83,7 @@ private:
     WinParams m_win;
     /// position for our model
     ngl::Vec3 m_modelPos;
-    std::unique_ptr<Generator> m_generator;
+    std::unique_ptr<particleGenerator> m_ParticleGenerator;
     ngl::Mat4 m_mouseGlobalTX;
     ngl::Mat4 m_view;
     ngl::Mat4 m_project;

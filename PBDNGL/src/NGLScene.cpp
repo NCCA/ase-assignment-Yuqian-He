@@ -43,7 +43,7 @@ void NGLScene::initializeGL()
   glEnable(GL_DEPTH_TEST);
   // enable multisampling for smoother drawing
   glEnable(GL_MULTISAMPLE);
-  m_generator=std::make_unique<Generator>(1);
+  m_ParticleGenerator=std::make_unique<particleGenerator>(2);
 
 
   //the basic color and shader
@@ -58,7 +58,7 @@ void NGLScene::initializeGL()
   //ngl::ShaderLib::setUniform("Colour",1.0f,0.0f,0.0f,1.0f);
   glPointSize(5);//easy to see the particle
 
-  m_generator->set_particleExtForce(0,1.0f,0.0f,0.0f);
+  m_ParticleGenerator->set_particleExtForce(0,1.0f,1.0f,0.0f);
   
   //text
   //m_text=std::make_unique<ngl::Text>("fonts/FreeSans.ttf",18);
@@ -69,7 +69,7 @@ void NGLScene::initializeGL()
 
 void NGLScene::timerEvent(QTimerEvent *_event)
 {
-  m_generator->update();
+  m_ParticleGenerator->update();
   update();
 }
 
@@ -89,7 +89,7 @@ void NGLScene::paintGL()
   ngl::ShaderLib::setUniform("MVP",m_project*m_view*m_mouseGlobalTX);
   
   //ngl::ShaderLib::use(ParticleShader);
-  m_generator->render();
+  m_ParticleGenerator->render();
   //m_text->renderText(10,680,"My Text is Here");
 }
 

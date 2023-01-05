@@ -55,8 +55,8 @@ void NGLScene::initializeGL()
   ngl::ShaderLib::loadShader(ParticleShader,"shaders/ParticleVertex.glsl","shaders/ParticleFragment.glsl");
   ngl::ShaderLib::use(ParticleShader);
   ngl::ShaderLib::setUniform("MVP",m_project*m_view);
-  //ngl::ShaderLib::setUniform("Colour",1.0f,0.0f,0.0f,1.0f);
-  glPointSize(5);//easy to see the particle
+  ngl::ShaderLib::setUniform("Colour",1.0f,0.0f,0.0f,1.0f);
+  glPointSize(4);//easy to see the particle
 
   m_ParticleGenerator->set_particleExtForce(0,1.0f,1.0f,0.0f);
   

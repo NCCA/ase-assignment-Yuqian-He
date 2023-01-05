@@ -22,11 +22,14 @@ particleGenerator::particleGenerator(size_t _numParticle)
     int j=0;
     for(auto i=0; i<_numParticle;++i)
     {
-        m_positions[i].set(0.0f,0.0f+i,0.0f);
+        m_positions[i].set(0.0f,0.0f+j,0.0f);
         m_colours[i]=ngl::Random::getRandomColour3();
         j++;
     }
-    m_vao=ngl::vaoFactoryCast<ngl::MultiBufferVAO>(ngl::VAOFactory::createVAO(ngl::multiBufferVAO,GL_POINTS));
+    
+    
+    m_vao = ngl::vaoFactoryCast<ngl::MultiBufferVAO>(ngl::VAOFactory::createVAO(ngl::multiBufferVAO,GL_LINES | GL_POINTS));
+    //m_vao = ngl::vaoFactoryCast<ngl::MultiBufferVAO>(ngl::VAOFactory::createVAO(ngl::multiBufferVAO,GL_POINTS));
     m_vao->bind();
     //buffer 0 is position data
     m_vao->setData(ngl::MultiBufferVAO::VertexData(m_positions.size()*sizeof(ngl::Vec3),m_positions[0].m_x));
@@ -137,6 +140,7 @@ void particleGenerator::render() const
     m_vao->setData(0,ngl::MultiBufferVAO::VertexData(m_positions.size()*sizeof(ngl::Vec3), m_positions[0].m_x));
     //m_vao->setVertexAttributePointer(0,3,GL_FLOAT,sizeof(Particle),0);
     //m_vao->setNumIndices(m_particles.size());
+    //glDrawElements(GL_LINES | GL_POINTS, m_positions.size(), GL_UNSIGNED_INT, 0);
     m_vao->draw();
     m_vao->unbind();
 

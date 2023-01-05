@@ -39,6 +39,7 @@ class particleGenerator
     std::vector<float> m_inverseMasses;
     std::vector<bool> m_ifFixeds;
     std::unique_ptr<ngl::MultiBufferVAO> m_vao;
+    ngl::Vec3 m_pos;
 
 };
 

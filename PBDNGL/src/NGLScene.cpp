@@ -126,7 +126,7 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
     break;
   case Qt::Key_1 : 
     //std::cout<<"1111"<<'\n';
-    m_ParticleGenerator->set_particleExtForce(4,0.0f,-1000.0f,0.0f);
+    m_ParticleGenerator->set_particleExtForce(19,0.0f,-10000.0f,0.0f);
     break;
 
   default : break;
@@ -141,12 +141,12 @@ void NGLScene::keyReleaseEvent(QKeyEvent *_event)
   if (_event->key() == Qt::Key_1)
   {
     //std::cout<<"1111"<<'\n';
-    m_ParticleGenerator->set_particleExtForce(4,0.0f,1000.0f,0.0f);
+    m_ParticleGenerator->set_particleExtForce(19,0.0f,10000.0f,0.0f);
   }
 }
 
 void NGLScene::testAddForce()
 {
-  m_ParticleGenerator=std::make_unique<particleGenerator>(5);
+  m_ParticleGenerator=std::make_unique<particleGenerator>(20);
   //m_ParticleGenerator->set_particleExtForce(1,0.0f,-0.98f,0.0f);
 }

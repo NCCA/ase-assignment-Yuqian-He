@@ -27,7 +27,7 @@ class particleGenerator
     bool get_ifFixed(size_t _index);
 
     size_t get_numParticles() const;
-    void distanceConstrain(size_t _index, float originalLength);
+    void distanceConstrain(size_t _index, float originalLength,float k);
     void update();
     void render() const;
     void paint() const;

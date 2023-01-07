@@ -23,16 +23,17 @@ particleGenerator::particleGenerator(size_t _numParticle)
     int j=0;
     for(auto i=0; i<_numParticle;++i)
     {
-        m_positions[i].set(0.0f,0.0f-j,0.0f);
+        m_positions[i].set(0.0f,0.0f-j*0.1,0.0f);
         m_colours[i]=ngl::Random::getRandomColour3();
         m_ifFixeds[i]=false;
         j++;
     }
     m_inverseMasses[0]=0;
-    m_inverseMasses[1]=0.001;
-    m_inverseMasses[2]=0.001;
-    m_inverseMasses[3]=0.001;
-    m_inverseMasses[4]=0.001;
+
+    for(auto i=1; i<_numParticle;++i)
+    {
+        m_inverseMasses[i]=0.99;
+    }
 
     m_vao = ngl::vaoFactoryCast<ngl::MultiBufferVAO>(ngl::VAOFactory::createVAO(ngl::multiBufferVAO,GL_LINES | GL_POINTS));
     particleGenerator::paint();
@@ -148,7 +149,8 @@ size_t particleGenerator::get_numParticles() const
 
 void particleGenerator::update()
 {
-    std::cout<<"***********************************************************"<<'\n';
+    //std::cout<<"***********************************************************"<<'\n';
+    //calculate the proposed position
     for(size_t i=0; i<m_positions.size(); ++i)
     {
         if(m_ifFixeds[i] == false)
@@ -156,29 +158,21 @@ void particleGenerator::update()
             set_particleProposedPosition(i);
         }              
     }
-    // std::cout<<m_positions[1].m_x<<','<<m_positions[1].m_y<<','<<m_positions[1].m_z<<'\n';
-    // std::cout<<m_positions[2].m_x<<','<<m_positions[2].m_y<<','<<m_positions[2].m_z<<'\n';
-    // std::cout<<m_positions[3].m_x<<','<<m_positions[3].m_y<<','<<m_positions[3].m_z<<'\n';
-    // std::cout<<m_positions[4].m_x<<','<<m_positions[4].m_y<<','<<m_positions[4].m_z<<'\n';
-    // std::cout<<m_velocities[1].m_x<<','<<m_velocities[1].m_y<<','<<m_velocities[1].m_z<<'\n';
-    for(int i=0;i<5;++i)//为什么i越大越拉不动-->期望：回弹性应该越好
+ 
+    for(int i=0;i<10;++i)//为什么i越大越拉不动-->期望：回弹性应该越好
     {
-        std::cout<<"iteration"<<'\n';
         for(size_t i=0;i<m_positions.size()-1;i++)
         {
-            std::cout<<i<<"~~~~~~~~~~~~~~~~~~~~~~"<<'\n';
-            distanceConstrain(i,1);
+            distanceConstrain(i,0.1,0.5);
         }
     }
 
-    std::cout<<m_positions[1].m_y<<'\n';
-    std::cout<<m_positions[2].m_y<<'\n';
-    std::cout<<m_positions[3].m_y<<'\n';
-    std::cout<<m_positions[4].m_y<<'\n';
+    for(int i=0; i<m_positions.size();++i)
+    {
+        m_velocities[i] = (m_proposedPositions[i]-m_positions[i])/delta_t;
+        m_positions[i] = m_proposedPositions[i];
+    }
 
-    //float _dt=0.01;
-
-    //update the attribute of every particles
     
 }
 
@@ -187,9 +181,9 @@ void particleGenerator::render() const
     particleGenerator::paint();
 }
 
-void particleGenerator::distanceConstrain(size_t _index, float originalLength)
+void particleGenerator::distanceConstrain(size_t _index, float originalLength, float k)
 {
-    auto w1 = m_inverseMasses[_index]/(m_inverseMasses[_index]+m_inverseMasses[_index+1]);
+    auto w1 = (-m_inverseMasses[_index])/(m_inverseMasses[_index]+m_inverseMasses[_index+1]);
     auto w2 = m_inverseMasses[_index+1]/(m_inverseMasses[_index]+m_inverseMasses[_index+1]);
     ngl::Vec3 delta_p1;
     ngl::Vec3 delta_p2;
@@ -197,44 +191,16 @@ void particleGenerator::distanceConstrain(size_t _index, float originalLength)
 
     auto p1 = m_proposedPositions[_index];
     auto p2 = m_proposedPositions[_index+1];
-    //std::cout<<m_proposedPositions[_index+1].m_x<<','<<m_proposedPositions[_index+1].m_y<<','<<m_proposedPositions[_index+1].m_z<<'\n';
+   
     auto currentLength = sqrt(pow(p1.m_x-p2.m_x, 2)+pow(p1.m_y-p2.m_y,2)+pow(p1.m_z-p2.m_z,2));
-    auto p = currentLength-originalLength;
-    //std::cout<<currentLength<<"!!!!!!!!!!!!!!!"<<'\n';
-    auto n = (p1-p2)/currentLength;
-    delta_p1 = -w1*p*n;
-    delta_p2 = w2*p*n;
-    std::cout<<delta_p2.m_x<<","<<delta_p2.m_y<<","<<delta_p2.m_z<<"????"<<'\n';
-    //std::cout<<m_proposedPositions[_index+1].m_y<<'\n';
+    auto s1 = w1* (currentLength-originalLength)/currentLength;
+    auto s2 = w2* (currentLength-originalLength)/currentLength;
+
+    delta_p1 = s1*(p1-p2)*k;
+    delta_p2 = s2*(p1-p2)*k;
+
     m_proposedPositions[_index]+=delta_p1;
     m_proposedPositions[_index+1]+=delta_p2;
-    //std::cout<<m_proposedPositions[_index+1].m_y<<'\n';
 
-        // std::cout<<"繼續遍歷十次"<<'\n';
-        // std::cout<<m_proposedPositions[_index].m_x<<"',!!!!'"<<m_proposedPositions[_index].m_y<<','<<m_proposedPositions[_index].m_z<<'\n';
-        // std::cout<<m_proposedPositions[_index+1].m_x<<','<<m_proposedPositions[_index+1].m_y<<','<<m_proposedPositions[_index+1].m_z<<'\n';
     
-
-    //std::cout<<delta_p2.m_x<<","<<delta_p2.m_y<<","<<delta_p2.m_z<<"????"<<'\n';
-    m_positions[_index] = m_proposedPositions[_index];
-    m_positions[_index+1] = m_proposedPositions[_index+1];
-    //std::cout<<m_positions[1].m_x<<","<<m_positions[1].m_y<<","<<m_positions[1].m_z<<'\n';
-    // if(p<0.5&&p>-0.5){
-    //     m_ifFixeds[_index] = true;
-    //     m_ifFixeds[_index+1] = true;
-    // }
-    //std::cout<<m_positions[_index].m_x<<','<<m_positions[_index].m_y<<','<<m_positions[_index].m_z<<'\n';
-    // auto p1=m_proposedPositions[_index];
-    // auto p2=m_proposedPositions[_index+1];
-    // auto currentLength = sqrt(pow(p2.m_x-p1.m_x, 2)+pow(p2.m_y-p1.m_y,2)+pow(p2.m_z-p1.m_z,2));
-    // auto displacement = (currentLength-originalLength)/currentLength;
-    // //std::cout<<currentLength<<"`````````````````````````````````````````"<<'\n';
-    // m_extForces[_index] -= k*displacement*(p1-p2);
-    // m_extForces[_index+1] += k*displacement*(p1-p2);
-    // std::cout<<m_extForces[_index].m_x<<','<<m_extForces[_index].m_y<<','<<m_extForces[_index].m_z<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<'\n';
-    // m_velocities[_index] += m_extForces[_index] * m_inverseMasses[_index] * delta_t ;
-    // m_velocities[_index+1] += m_extForces[_index+1] * m_inverseMasses[_index+1] * delta_t ;
-
-    // std::cout<<"1111111111111111111111111111111111111111"<<'\n';
-    // std::cout<<m_proposedPositions[_index].m_x<<','<<m_proposedPositions[_index].m_y<<','<<m_proposedPositions[_index].m_z<<'\n';
 }

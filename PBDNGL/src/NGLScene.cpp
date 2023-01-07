@@ -8,6 +8,7 @@
 #include<ngl/Util.h>
 #include <iostream>
 #include <ngl/Random.h>
+#include <ngl/Transformation.h>
 
 NGLScene::NGLScene()
 {
@@ -43,27 +44,26 @@ void NGLScene::initializeGL()
   glEnable(GL_DEPTH_TEST);
   // enable multisampling for smoother drawing
   glEnable(GL_MULTISAMPLE);
-  m_ParticleGenerator=std::make_unique<particleGenerator>(2);
-
-
+ 
+  NGLScene::testAddForce();
   //the basic color and shader
   ngl::ShaderLib::use(ngl::nglColourShader);
 
-  m_view=ngl::lookAt({12,12,12},{0,0,0},{0,1,0});
+  m_view=ngl::lookAt({20,20,20},{0,0,0},{0,1,0});
   m_project=ngl::perspective(45.0f,1.0f,0.01f,50.0f);
   //useShader
   ngl::ShaderLib::loadShader(ParticleShader,"shaders/ParticleVertex.glsl","shaders/ParticleFragment.glsl");
   ngl::ShaderLib::use(ParticleShader);
   ngl::ShaderLib::setUniform("MVP",m_project*m_view);
-  ngl::ShaderLib::setUniform("Colour",1.0f,0.0f,0.0f,1.0f);
-  glPointSize(4);//easy to see the particle
-
-  m_ParticleGenerator->set_particleExtForce(0,1.0f,1.0f,0.0f);
+  //ngl::ShaderLib::setUniform("Colour",1.0f,0.0f,0.0f,1.0f);
+  glPointSize(3);//easy to see the particle
   
   //text
   //m_text=std::make_unique<ngl::Text>("fonts/FreeSans.ttf",18);
   //m_text->setColour(1.0f,1.0f,0.0f);
 
+  //create the floor
+  ngl::VAOPrimitives::createLineGrid("floor",20,20,20);
   startTimer(10);
 }
 
@@ -85,33 +85,68 @@ void NGLScene::paintGL()
   m_mouseGlobalTX.m_m[3][0]=m_modelPos.m_x;
   m_mouseGlobalTX.m_m[3][1]=m_modelPos.m_y;
   m_mouseGlobalTX.m_m[3][2]=m_modelPos.m_z;
-
-  ngl::ShaderLib::setUniform("MVP",m_project*m_view*m_mouseGlobalTX);
   
-  //ngl::ShaderLib::use(ParticleShader);
+  //draw particle
+  ngl::ShaderLib::use(ParticleShader);
+  ngl::Transformation tx;
+  tx.setPosition(m_aimPos);
+  tx.setScale(2.0f,2.0f,2.0f);
+  ngl::ShaderLib::setUniform("MVP",m_project * m_view  * m_mouseGlobalTX *tx.getMatrix());
+  //ngl::ShaderLib::setUniform("MVP", m_project * m_view * m_mouseGlobalTX);
   m_ParticleGenerator->render();
+
+  //draw floor
+  ngl::ShaderLib::use(ngl::nglColourShader);
+  ngl::ShaderLib::setUniform("MVP",m_project * m_view * m_mouseGlobalTX);
+  ngl::ShaderLib::setUniform("Colour",0.6f, 0.6f, 0.6f, 1.0f);
+  ngl::VAOPrimitives::draw("floor");
+  
   //m_text->renderText(10,680,"My Text is Here");
+  //std::cout<<m_ParticleGenerator->get_particleExtForce(1).m_x<<','<<m_ParticleGenerator->get_particleExtForce(1).m_y<<','<<m_ParticleGenerator->get_particleExtForce(1).m_z<<'\n';
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
 void NGLScene::keyPressEvent(QKeyEvent *_event)
 {
-  // this method is called every time the main window recives a key event.
+    // this method is called every time the main window recives a key event.
   // we then switch on the key value and set the camera in the GLWindow
+  static int maxActive=500;
+  static float spread=1.5;
   switch (_event->key())
   {
   // escape key to quite
-  case Qt::Key_Escape : QGuiApplication::exit(EXIT_SUCCESS); break;
-  case Qt::Key_Space :
-      m_win.spinXFace=0;
-      m_win.spinYFace=0;
-      m_modelPos.set(ngl::Vec3::zero());
+  case Qt::Key_Escape:
+    QGuiApplication::exit(EXIT_SUCCESS);
+    break;
+  case Qt::Key_Space:
+    m_win.spinXFace = 0;
+    m_win.spinYFace = 0;
+    m_modelPos.set(ngl::Vec3::zero());
+    break;
+  case Qt::Key_1 : 
+    //std::cout<<"1111"<<'\n';
+    m_ParticleGenerator->set_particleExtForce(4,0.0f,-1000.0f,0.0f);
+    break;
 
-  break;
   default : break;
   }
   // finally update the GLWindow and re-draw
 
     update();
+}
+
+void NGLScene::keyReleaseEvent(QKeyEvent *_event)
+{
+  if (_event->key() == Qt::Key_1)
+  {
+    //std::cout<<"1111"<<'\n';
+    m_ParticleGenerator->set_particleExtForce(4,0.0f,1000.0f,0.0f);
+  }
+}
+
+void NGLScene::testAddForce()
+{
+  m_ParticleGenerator=std::make_unique<particleGenerator>(5);
+  //m_ParticleGenerator->set_particleExtForce(1,0.0f,-0.98f,0.0f);
 }

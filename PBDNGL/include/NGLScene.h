@@ -46,6 +46,7 @@ class NGLScene : public QOpenGLWindow
     /// @brief this is called everytime we resize the window
     //----------------------------------------------------------------------------------------------------------------------
     void resizeGL(int _w, int _h) override;
+    void testAddForce();
 
 private:
 
@@ -54,6 +55,7 @@ private:
     /// @param [in] _event the Qt event to query for size etc
     //----------------------------------------------------------------------------------------------------------------------
     void keyPressEvent(QKeyEvent *_event) override;
+    void keyReleaseEvent(QKeyEvent *_event) override;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief this method is called every time a mouse is moved
     /// @param _event the Qt Event structure
@@ -89,6 +91,7 @@ private:
     ngl::Mat4 m_project;
 
     std::unique_ptr<ngl::Text>m_text;
+    ngl::Vec3 m_aimPos={0,10,0};
 };
 
 

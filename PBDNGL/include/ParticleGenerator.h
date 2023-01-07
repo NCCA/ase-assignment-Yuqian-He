@@ -27,8 +27,10 @@ class particleGenerator
     bool get_ifFixed(size_t _index);
 
     size_t get_numParticles() const;
+    void distanceConstrain(size_t _index, float originalLength);
     void update();
     void render() const;
+    void paint() const;
 
     private:
     std::vector<ngl::Vec3> m_positions;
@@ -39,7 +41,6 @@ class particleGenerator
     std::vector<float> m_inverseMasses;
     std::vector<bool> m_ifFixeds;
     std::unique_ptr<ngl::MultiBufferVAO> m_vao;
-    ngl::Vec3 m_pos;
 
 };
 

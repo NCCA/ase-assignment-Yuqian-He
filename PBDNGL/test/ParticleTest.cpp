@@ -1,5 +1,4 @@
 #include<gtest/gtest.h>
-#include"Particle.h"
 #include"ParticleGenerator.h"
 #include<iostream>
 #include<ngl/Vec3.h>

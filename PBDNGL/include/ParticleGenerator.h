@@ -1,7 +1,6 @@
 #ifndef PARTICLEGENERATOR_H_
 #define PARTICLEGENERATOR_H_
 #include <cstddef>
-#include<Particle.h>
 #include<vector>
 #include<ngl/Vec3.h>
 #include<ngl/Vec4.h>

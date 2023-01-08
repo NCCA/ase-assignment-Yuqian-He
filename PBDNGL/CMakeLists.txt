@@ -46,7 +46,6 @@ target_sources(${TargetName} PRIVATE ${PROJECT_SOURCE_DIR}/src/main.cpp
 			${PROJECT_SOURCE_DIR}/src/NGLSceneMouseControls.cpp	
             ${PROJECT_SOURCE_DIR}/src/Constrain.cpp		
             ${PROJECT_SOURCE_DIR}/include/NGLScene.h
-            ${PROJECT_SOURCE_DIR}/include/Particle.h
             ${PROJECT_SOURCE_DIR}/include/ParticleGenerator.h 
             ${PROJECT_SOURCE_DIR}/include/Constrain.h
 )
@@ -61,7 +60,6 @@ include_directories(include)
 add_executable(ParticleTest)
 target_sources(ParticleTest PRIVATE test/ParticleTest.cpp
                 ${PROJECT_SOURCE_DIR}/src/ParticleGenerator.cpp
-                ${PROJECT_SOURCE_DIR}/include/Particle.h
                 ${PROJECT_SOURCE_DIR}/include/ParticleGenerator.h  
 )
 

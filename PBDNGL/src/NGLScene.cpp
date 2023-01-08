@@ -14,6 +14,7 @@ NGLScene::NGLScene()
 {
   // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
   setTitle("Blank NGL");
+
 }
 
 
@@ -70,7 +71,7 @@ void NGLScene::initializeGL()
 //改！！！！！！！！！！
 void NGLScene::timerEvent(QTimerEvent *_event)
 {
-  m_ParticleGenerator->update();
+  m_sv.PBD(0.99,0.1,10);
   update();
 }
 

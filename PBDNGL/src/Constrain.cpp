@@ -19,7 +19,7 @@ float constrain::get_stiffness()
     return m_stiffness;
 }
 
-void constrain::distanceConstrain(particleGenerator * particle, size_t _index, float originalLength)
+void constrain::distanceConstrain(particleGenerator* particle, size_t _index, float originalLength)
 {
     auto w1=(-particle->get_particleInverseMass(_index))/(particle->get_particleInverseMass(_index)+particle->get_particleInverseMass(_index+1));
     auto w2=particle->get_particleInverseMass(_index+1)/(particle->get_particleInverseMass(_index)+particle->get_particleInverseMass(_index+1));

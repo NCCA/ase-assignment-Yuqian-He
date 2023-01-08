@@ -6,14 +6,14 @@
 #include<ngl/Vec4.h>
 #include<string_view>
 #include<ngl/MultiBufferVAO.h>
-#include"SimulationSolver.h"
+
 
 
 class particleGenerator
 {
     public:
-    
-    particleGenerator(size_t _numParticle);
+    particleGenerator();
+    void initialParticle(size_t _numParticle);
     //accessor
     void set_particlePosition(size_t _index, float _x, float _y, float _z);
     ngl::Vec3 get_particlePosition(size_t _index);
@@ -29,9 +29,6 @@ class particleGenerator
     bool get_ifFixed(size_t _index);
 
     size_t get_numParticles() const;
-    void distanceConstrain(size_t _index, float originalLength,float k);
-    void set_particleProposedPosition_b(size_t _index);
-    void update();
     void render() const;
     void paint() const;
 
@@ -44,7 +41,6 @@ class particleGenerator
     std::vector<float> m_inverseMasses;
     std::vector<bool> m_ifFixeds;
     std::unique_ptr<ngl::MultiBufferVAO> m_vao;
-    simulationSolver sv;
 
 };
 

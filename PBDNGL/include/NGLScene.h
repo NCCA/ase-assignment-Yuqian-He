@@ -86,7 +86,6 @@ private:
     WinParams m_win;
     /// position for our model
     ngl::Vec3 m_modelPos;
-    std::unique_ptr<particleGenerator> m_ParticleGenerator;//删掉！！！！！！
     simulationSolver m_sv;
     ngl::Mat4 m_mouseGlobalTX;
     ngl::Mat4 m_view;

@@ -10,7 +10,9 @@
 
 const float delta_t=0.005;
 
-particleGenerator::particleGenerator(size_t _numParticle)
+particleGenerator::particleGenerator(){}
+
+void particleGenerator::initialParticle(size_t _numParticle)
 {
     m_positions.resize(_numParticle);
     m_extForces.resize(_numParticle);
@@ -107,20 +109,6 @@ void particleGenerator::set_particleProposedPosition(size_t _index, float _x, fl
     m_proposedPositions[_index].set(_x, _y, _z);
 }
 
-//应该放在solver里
-void particleGenerator::set_particleProposedPosition_b(size_t _index)
-{
-    
-    auto acceleration = m_extForces[_index]*m_inverseMasses[_index];
-    //std::cout<<o_p.m_extForce.m_x<<','<<o_p.m_extForce.m_y<<','<<o_p.m_extForce.m_y<<'\n';
-    //std::cout<<acceleration.m_x<<','<<acceleration.m_y<<','<<acceleration.m_y<<'\n';
-    m_velocities[_index] = m_velocities[_index]+delta_t*m_extForces[_index];
-    //std::cout<<o_p.m_velocity.m_x<<','<<o_p.m_velocity.m_y<<','<<o_p.m_velocity.m_y<<'\n';
-    m_proposedPositions[_index] = m_positions[_index]+delta_t*m_velocities[_index];
-    //m_positions[_index] = m_positions[_index]+delta_t*m_velocities[_index];
-    //std::cout<<m_positions[1].m_x<<','<<m_positions[1].m_y<<','<<m_positions[1].m_z<<'\n';
-}
-
 ngl::Vec3 particleGenerator::get_particleProposedPosition(size_t _index)
 {
     return m_proposedPositions[_index];
@@ -162,62 +150,8 @@ size_t particleGenerator::get_numParticles() const
     return m_positions.size();
 }
 
-//改成引用！
-void particleGenerator::update()
-{
-    //std::cout<<"***********************************************************"<<'\n';
-    //calculate the proposed position
-    for(size_t i=0; i<m_positions.size(); ++i)
-    {
-        if(m_ifFixeds[i] == false)
-        {
-            set_particleProposedPosition_b(i);
-        }              
-    }
- 
-    for(int i=0;i<10;++i)//为什么i越大越拉不动-->期望：回弹性应该越好
-    {
-        for(size_t i=0;i<m_positions.size()-1;i++)
-        {
-            distanceConstrain(i,0.1,0.5);
-        }
-    }
-
-    for(int i=0; i<m_positions.size();++i)
-    {
-        m_velocities[i] = (m_proposedPositions[i]-m_positions[i])/delta_t;
-        m_positions[i] = m_proposedPositions[i];
-    }
-
-    
-}
 
 void particleGenerator::render() const
 {
     particleGenerator::paint();
-}
-
-//删掉！！！
-void particleGenerator::distanceConstrain(size_t _index, float originalLength, float k)
-{
-    auto w1 = (-m_inverseMasses[_index])/(m_inverseMasses[_index]+m_inverseMasses[_index+1]);
-    auto w2 = m_inverseMasses[_index+1]/(m_inverseMasses[_index]+m_inverseMasses[_index+1]);
-    ngl::Vec3 delta_p1;
-    ngl::Vec3 delta_p2;
-
-
-    auto p1 = m_proposedPositions[_index];
-    auto p2 = m_proposedPositions[_index+1];
-   
-    auto currentLength = sqrt(pow(p1.m_x-p2.m_x, 2)+pow(p1.m_y-p2.m_y,2)+pow(p1.m_z-p2.m_z,2));
-    auto s1 = w1* (currentLength-originalLength)/currentLength;
-    auto s2 = w2* (currentLength-originalLength)/currentLength;
-
-    delta_p1 = s1*(p1-p2)*k;
-    delta_p2 = s2*(p1-p2)*k;
-
-    m_proposedPositions[_index]+=delta_p1;
-    m_proposedPositions[_index+1]+=delta_p2;
-
-    
 }

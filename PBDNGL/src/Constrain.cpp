@@ -34,7 +34,15 @@ void constrain::distanceConstrain(particleGenerator * particle, size_t _index, f
     auto delta_p1 = s1*(p1-p2)*m_stiffness;
     auto delta_p2 = s2*(p1-p2)*m_stiffness;
 
-    particle->set_particleProposedPosition(_index, delta_p1.m_x,delta_p1.m_y,delta_p1.m_z);
-    particle->set_particleProposedPosition(_index+1, delta_p2.m_x,delta_p2.m_y,delta_p2.m_z);
+    auto _x1 = particle->get_particleProposedPosition(_index).m_x+delta_p1.m_x;
+    auto _y1 = particle->get_particleProposedPosition(_index).m_y+delta_p1.m_y;
+    auto _z1 = particle->get_particleProposedPosition(_index).m_z+delta_p1.m_z;
+
+    auto _x2 = particle->get_particleProposedPosition(_index+1).m_x+delta_p2.m_x;
+    auto _y2 = particle->get_particleProposedPosition(_index+1).m_y+delta_p2.m_y;
+    auto _z2 = particle->get_particleProposedPosition(_index+1).m_z+delta_p2.m_z;
+
+    particle->set_particleProposedPosition(_index,_x1,_y1,_z1);
+    particle->set_particleProposedPosition(_index+1,_x2,_y2,_z2);
 
 }

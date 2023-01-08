@@ -67,6 +67,7 @@ void NGLScene::initializeGL()
   startTimer(10);
 }
 
+//改！！！！！！！！！！
 void NGLScene::timerEvent(QTimerEvent *_event)
 {
   m_ParticleGenerator->update();
@@ -93,7 +94,7 @@ void NGLScene::paintGL()
   tx.setScale(2.0f,2.0f,2.0f);
   ngl::ShaderLib::setUniform("MVP",m_project * m_view  * m_mouseGlobalTX *tx.getMatrix());
   //ngl::ShaderLib::setUniform("MVP", m_project * m_view * m_mouseGlobalTX);
-  m_ParticleGenerator->render();
+  m_sv.renderParticle();
 
   //draw floor
   ngl::ShaderLib::use(ngl::nglColourShader);
@@ -102,7 +103,6 @@ void NGLScene::paintGL()
   ngl::VAOPrimitives::draw("floor");
   
   //m_text->renderText(10,680,"My Text is Here");
-  //std::cout<<m_ParticleGenerator->get_particleExtForce(1).m_x<<','<<m_ParticleGenerator->get_particleExtForce(1).m_y<<','<<m_ParticleGenerator->get_particleExtForce(1).m_z<<'\n';
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -126,7 +126,7 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
     break;
   case Qt::Key_1 : 
     //std::cout<<"1111"<<'\n';
-    m_ParticleGenerator->set_particleExtForce(19,0.0f,-10000.0f,0.0f);
+    m_sv.addForce(19,0.0f,-1000.0f,0.0f);
     break;
 
   default : break;
@@ -141,12 +141,11 @@ void NGLScene::keyReleaseEvent(QKeyEvent *_event)
   if (_event->key() == Qt::Key_1)
   {
     //std::cout<<"1111"<<'\n';
-    m_ParticleGenerator->set_particleExtForce(19,0.0f,10000.0f,0.0f);
+    m_sv.addForce(19,0.0f,1000.0f,0.0f);
   }
 }
 
 void NGLScene::testAddForce()
 {
-  m_ParticleGenerator=std::make_unique<particleGenerator>(20);
-  //m_ParticleGenerator->set_particleExtForce(1,0.0f,-0.98f,0.0f);
+  m_sv.initializeParticle(20);
 }

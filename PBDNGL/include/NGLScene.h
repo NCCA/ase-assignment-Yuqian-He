@@ -4,6 +4,7 @@
 #include "WindowParams.h"
 #include<memory>
 #include "ParticleGenerator.h"
+#include"SimulationSolver.h"
 #include <ngl/Mat4.h>
 #include <ngl/Text.h>
 // this must be included after NGL includes else we get a clash with gl libs
@@ -85,7 +86,8 @@ private:
     WinParams m_win;
     /// position for our model
     ngl::Vec3 m_modelPos;
-    std::unique_ptr<particleGenerator> m_ParticleGenerator;
+    std::unique_ptr<particleGenerator> m_ParticleGenerator;//删掉！！！！！！
+    simulationSolver m_sv;
     ngl::Mat4 m_mouseGlobalTX;
     ngl::Mat4 m_view;
     ngl::Mat4 m_project;

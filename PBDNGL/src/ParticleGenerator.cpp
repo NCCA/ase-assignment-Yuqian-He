@@ -104,7 +104,7 @@ ngl::Vec3 particleGenerator::get_particleExtForce(size_t _index)
 
 void particleGenerator::set_particleProposedPosition(size_t _index, float _x, float _y, float _z)
 {
-    m_proposedPositions[_index]+={_x, _y, _z};
+    m_proposedPositions[_index].set(_x, _y, _z);
 }
 
 //应该放在solver里
@@ -131,6 +131,16 @@ ngl::Vec3 particleGenerator::get_particleVelocity(size_t _index)
     return m_velocities[_index];
 }
 
+void particleGenerator::set_particleDampVelocity(size_t _index, float damp)
+{
+    m_velocities[_index]*=damp;
+}
+
+void particleGenerator::set_particleVelocity(size_t _index,float _x, float _y, float _z)
+{
+    m_velocities[_index].set(_x, _y, _z);
+}
+
 void particleGenerator::set_particleMass(size_t _index, size_t mass)
 {
     if(mass == 0) m_inverseMasses[_index]=1;
@@ -152,6 +162,7 @@ size_t particleGenerator::get_numParticles() const
     return m_positions.size();
 }
 
+//改成引用！
 void particleGenerator::update()
 {
     //std::cout<<"***********************************************************"<<'\n';
@@ -186,6 +197,7 @@ void particleGenerator::render() const
     particleGenerator::paint();
 }
 
+//删掉！！！
 void particleGenerator::distanceConstrain(size_t _index, float originalLength, float k)
 {
     auto w1 = (-m_inverseMasses[_index])/(m_inverseMasses[_index]+m_inverseMasses[_index+1]);

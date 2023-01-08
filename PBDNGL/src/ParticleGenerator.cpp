@@ -102,7 +102,13 @@ ngl::Vec3 particleGenerator::get_particleExtForce(size_t _index)
     return m_extForces[_index];
 }
 
-void particleGenerator::set_particleProposedPosition(size_t _index)
+void particleGenerator::set_particleProposedPosition(size_t _index, float _x, float _y, float _z)
+{
+    m_proposedPositions[_index]+={_x, _y, _z};
+}
+
+//应该放在solver里
+void particleGenerator::set_particleProposedPosition_b(size_t _index)
 {
     
     auto acceleration = m_extForces[_index]*m_inverseMasses[_index];
@@ -131,10 +137,9 @@ void particleGenerator::set_particleMass(size_t _index, size_t mass)
     else m_inverseMasses[_index]=1/mass;
 }
 
-size_t particleGenerator::get_particleMass(size_t _index)
+size_t particleGenerator::get_particleInverseMass(size_t _index)
 {
-    if(m_inverseMasses[_index]==0) return 10000;
-    else return 1/m_inverseMasses[_index];
+    return m_inverseMasses[_index];
 }
 
 bool particleGenerator::get_ifFixed(size_t _index) 
@@ -155,7 +160,7 @@ void particleGenerator::update()
     {
         if(m_ifFixeds[i] == false)
         {
-            set_particleProposedPosition(i);
+            set_particleProposedPosition_b(i);
         }              
     }
  

@@ -18,15 +18,16 @@ class particleGenerator
     ngl::Vec3 get_particlePosition(size_t _index);
     void set_particleExtForce(size_t _index, float _x, float _y, float _z);
     ngl::Vec3 get_particleExtForce(size_t _index);
-    void set_particleProposedPosition(size_t _index);
+    void set_particleProposedPosition(size_t _index,float _x, float _y, float _z);
     ngl::Vec3 get_particleProposedPosition(size_t _index);
     ngl::Vec3 get_particleVelocity(size_t _index);
     void set_particleMass(size_t _index, size_t mass);
-    size_t get_particleMass(size_t _index);
+    size_t get_particleInverseMass(size_t _index);
     bool get_ifFixed(size_t _index);
 
     size_t get_numParticles() const;
     void distanceConstrain(size_t _index, float originalLength,float k);
+    void set_particleProposedPosition_b(size_t _index);
     void update();
     void render() const;
     void paint() const;

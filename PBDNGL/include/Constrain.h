@@ -9,7 +9,7 @@ class constrain
     constrain();
     void set_stiffness(float _stiffness);
     float get_stiffness();
-    void distanceConstrain(particleGenerator *particle, size_t _index, float originalLength);
+    void distanceConstrain(std::shared_ptr<particleGenerator> particle, size_t _index, float originalLength);
 
     private:
     float m_stiffness;

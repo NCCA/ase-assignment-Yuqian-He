@@ -10,7 +10,10 @@
 
 const float delta_t=0.005;
 
-particleGenerator::particleGenerator(){}
+particleGenerator::particleGenerator(size_t _numParticle)
+{
+    initialParticle(_numParticle);
+}
 
 void particleGenerator::initialParticle(size_t _numParticle)
 {
@@ -35,6 +38,7 @@ void particleGenerator::initialParticle(size_t _numParticle)
     for(auto i=1; i<_numParticle;++i)
     {
         m_inverseMasses[i]=0.99;
+        m_extForces[i].set(0.0f,-9.8f,0.0f);
     }
 
     m_vao = ngl::vaoFactoryCast<ngl::MultiBufferVAO>(ngl::VAOFactory::createVAO(ngl::multiBufferVAO,GL_LINES | GL_POINTS));
@@ -44,7 +48,6 @@ void particleGenerator::initialParticle(size_t _numParticle)
 //write the set data for rendering
 void particleGenerator::paint() const
 {
-    
 
     m_vao->bind();
     //buffer 0 is position data
@@ -145,6 +148,8 @@ bool particleGenerator::get_ifFixed(size_t _index)
     return m_ifFixeds[_index];
 }
 
+
+
 size_t particleGenerator::get_numParticles() const
 {
     return m_positions.size();
@@ -154,4 +159,9 @@ size_t particleGenerator::get_numParticles() const
 void particleGenerator::render() const
 {
     particleGenerator::paint();
+}
+
+void particleGenerator::update()
+{
+    
 }

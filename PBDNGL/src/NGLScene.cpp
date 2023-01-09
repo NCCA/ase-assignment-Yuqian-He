@@ -1,8 +1,8 @@
 #include <QMouseEvent>
 #include <QGuiApplication>
-
 #include "NGLScene.h"
 #include <ngl/NGLInit.h>
+#include"SimulationSolver.h"
 #include <ngl/VAOPrimitives.h>
 #include<ngl/ShaderLib.h>
 #include<ngl/Util.h>
@@ -46,7 +46,10 @@ void NGLScene::initializeGL()
   // enable multisampling for smoother drawing
   glEnable(GL_MULTISAMPLE);
  
-  NGLScene::testAddForce();
+  m_particleGenerator=std::make_unique<particleGenerator>(20);
+  
+  std::cout<<m_particleGenerator->get_particleInverseMass(2)<<'\n';
+
   //the basic color and shader
   ngl::ShaderLib::use(ngl::nglColourShader);
 
@@ -68,10 +71,10 @@ void NGLScene::initializeGL()
   startTimer(10);
 }
 
-//改！！！！！！！！！！
 void NGLScene::timerEvent(QTimerEvent *_event)
 {
-  m_sv.PBD(0.99,0.1,10);
+  PBD(m_particleGenerator,0.99,0.1,10);
+  //m_particleGenerator->update();
   update();
 }
 
@@ -95,7 +98,7 @@ void NGLScene::paintGL()
   tx.setScale(2.0f,2.0f,2.0f);
   ngl::ShaderLib::setUniform("MVP",m_project * m_view  * m_mouseGlobalTX *tx.getMatrix());
   //ngl::ShaderLib::setUniform("MVP", m_project * m_view * m_mouseGlobalTX);
-  m_sv.renderParticle();
+  m_particleGenerator->render();
 
   //draw floor
   ngl::ShaderLib::use(ngl::nglColourShader);
@@ -127,7 +130,7 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
     break;
   case Qt::Key_1 : 
     //std::cout<<"1111"<<'\n';
-    m_sv.addForce(19,0.0f,-1000.0f,0.0f);
+    m_particleGenerator->set_particleExtForce(19,0.0f,-10000.0f,0.0f);
     break;
 
   default : break;
@@ -142,11 +145,7 @@ void NGLScene::keyReleaseEvent(QKeyEvent *_event)
   if (_event->key() == Qt::Key_1)
   {
     //std::cout<<"1111"<<'\n';
-    m_sv.addForce(19,0.0f,1000.0f,0.0f);
+    m_particleGenerator->set_particleExtForce(19,0.0f,10000.0f,0.0f);
   }
 }
 
-void NGLScene::testAddForce()
-{
-  m_sv.initializeParticle(20);
-}

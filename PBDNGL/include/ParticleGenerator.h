@@ -12,7 +12,7 @@
 class particleGenerator
 {
     public:
-    particleGenerator();
+    particleGenerator(size_t _numParticle);
     void initialParticle(size_t _numParticle);
     //accessor
     void set_particlePosition(size_t _index, float _x, float _y, float _z);

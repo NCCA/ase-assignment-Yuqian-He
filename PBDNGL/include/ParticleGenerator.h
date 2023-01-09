@@ -14,6 +14,7 @@ class particleGenerator
     public:
     particleGenerator(size_t _numParticle);
     void initialParticle(size_t _numParticle);
+    void set_particleProposedPosition_b(size_t _index);
     //accessor
     void set_particlePosition(size_t _index, float _x, float _y, float _z);
     ngl::Vec3 get_particlePosition(size_t _index);
@@ -25,7 +26,7 @@ class particleGenerator
     void set_particleDampVelocity(size_t _index, float damp);
     void set_particleVelocity(size_t _index,float _x, float _y, float _z);
     void set_particleMass(size_t _index, size_t mass);
-    size_t get_particleInverseMass(size_t _index);
+    float get_particleInverseMass(size_t _index);
     bool get_ifFixed(size_t _index);
 
     size_t get_numParticles() const;

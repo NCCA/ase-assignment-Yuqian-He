@@ -38,7 +38,7 @@ void particleGenerator::initialParticle(size_t _numParticle)
     for(auto i=1; i<_numParticle;++i)
     {
         m_inverseMasses[i]=0.99;
-        m_extForces[i].set(0.0f,-9.8f,0.0f);
+        //m_extForces[i].set(0.0f,-9.8f,0.0f);
     }
 
     m_vao = ngl::vaoFactoryCast<ngl::MultiBufferVAO>(ngl::VAOFactory::createVAO(ngl::multiBufferVAO,GL_LINES | GL_POINTS));
@@ -84,6 +84,19 @@ void particleGenerator::paint() const
 
     m_vao->unbind();
 
+}
+
+void particleGenerator::set_particleProposedPosition_b(size_t _index)
+{
+    
+    auto acceleration = m_extForces[_index]*m_inverseMasses[_index];
+    //std::cout<<o_p.m_extForce.m_x<<','<<o_p.m_extForce.m_y<<','<<o_p.m_extForce.m_y<<'\n';
+    //std::cout<<acceleration.m_x<<','<<acceleration.m_y<<','<<acceleration.m_y<<'\n';
+    m_velocities[_index] = m_velocities[_index]+delta_t*m_extForces[_index];
+    //std::cout<<o_p.m_velocity.m_x<<','<<o_p.m_velocity.m_y<<','<<o_p.m_velocity.m_y<<'\n';
+    m_proposedPositions[_index] = m_positions[_index]+delta_t*m_velocities[_index];
+    //m_positions[_index] = m_positions[_index]+delta_t*m_velocities[_index];
+    //std::cout<<m_positions[1].m_x<<','<<m_positions[1].m_y<<','<<m_positions[1].m_z<<'\n';
 }
 
 void particleGenerator::set_particlePosition(size_t _index, float _x, float _y, float _z)
@@ -138,7 +151,7 @@ void particleGenerator::set_particleMass(size_t _index, size_t mass)
     else m_inverseMasses[_index]=1/mass;
 }
 
-size_t particleGenerator::get_particleInverseMass(size_t _index)
+float particleGenerator::get_particleInverseMass(size_t _index)
 {
     return m_inverseMasses[_index];
 }
@@ -161,7 +174,3 @@ void particleGenerator::render() const
     particleGenerator::paint();
 }
 
-void particleGenerator::update()
-{
-    
-}

@@ -46,7 +46,7 @@ void NGLScene::initializeGL()
   // enable multisampling for smoother drawing
   glEnable(GL_MULTISAMPLE);
  
-  m_particleGenerator=std::make_unique<particleGenerator>(20);
+  m_particleGenerator=std::make_unique<particleGenerator>(50);
   
   std::cout<<m_particleGenerator->get_particleInverseMass(2)<<'\n';
 
@@ -74,7 +74,7 @@ void NGLScene::initializeGL()
 void NGLScene::timerEvent(QTimerEvent *_event)
 {
   //std::cout<<m_particleGenerator->get_particlePosition(2).m_y<<'\n';
-  PBD(m_particleGenerator,0.99,0.1,1);
+  PBD(m_particleGenerator,0.99,0.05,1);
   //std::cout<<m_particleGenerator->get_particlePosition(19).m_y<<'\n';
   
   //m_particleGenerator->update();
@@ -133,7 +133,7 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
     break;
   case Qt::Key_1 : 
     //std::cout<<"1111"<<'\n';
-    m_particleGenerator->set_particleExtForce(19,0.0f,-200.0f,0.0f);
+    m_particleGenerator->set_particleExtForce(49,0.0f,-700.0f,100.0f);
     break;
 
   default : break;
@@ -148,7 +148,7 @@ void NGLScene::keyReleaseEvent(QKeyEvent *_event)
   if (_event->key() == Qt::Key_1)
   {
     //std::cout<<"1111"<<'\n';
-    m_particleGenerator->set_particleExtForce(19,0.0f,200.0f,0.0f);
+    m_particleGenerator->set_particleExtForce(49,0.0f,700.0f,-100.0f);
   }
 }
 

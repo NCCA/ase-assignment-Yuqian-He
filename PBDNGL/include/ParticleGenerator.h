@@ -14,7 +14,6 @@ class particleGenerator
     public:
     particleGenerator(size_t _numParticle);
     void initialParticle(size_t _numParticle);
-    void set_particleProposedPosition_b(size_t _index);
     //accessor
     void set_particlePosition(size_t _index, float _x, float _y, float _z);
     ngl::Vec3 get_particlePosition(size_t _index);

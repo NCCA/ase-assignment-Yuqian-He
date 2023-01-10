@@ -19,13 +19,11 @@ void makeProposedPosition(std::shared_ptr<particleGenerator> particle)
 {
     for(int i=0; i<particle->get_numParticles();++i)
     {
-        // auto acceleration=particle->get_particleExtForce(i)*particle->get_particleInverseMass(i);
-        // ngl::Vec3 delta = delta_t*particle->get_particleExtForce(i) + particle->get_particleVelocity(i);
-        // particle->set_particleVelocity(i,delta.m_x,delta.m_y,delta.m_z);
-        // ngl::Vec3 h=particle->get_particlePosition(i)+delta*particle->get_particleVelocity(i);
-        // particle->set_particleProposedPosition(i,h.m_x,h.m_y,h.m_z);
-
-        particle->set_particleProposedPosition_b(i);
+        auto acceleration=particle->get_particleExtForce(i)*particle->get_particleInverseMass(i);
+        ngl::Vec3 delta = delta_t*particle->get_particleExtForce(i) + particle->get_particleVelocity(i);
+        particle->set_particleVelocity(i,delta.m_x,delta.m_y,delta.m_z);
+        ngl::Vec3 h=particle->get_particlePosition(i)+delta_t*particle->get_particleVelocity(i);
+        particle->set_particleProposedPosition(i,h.m_x,h.m_y,h.m_z);
     }
 
 }

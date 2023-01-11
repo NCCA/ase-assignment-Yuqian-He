@@ -44,11 +44,12 @@ target_sources(${TargetName} PRIVATE ${PROJECT_SOURCE_DIR}/src/main.cpp
 			${PROJECT_SOURCE_DIR}/src/NGLScene.cpp  
             ${PROJECT_SOURCE_DIR}/src/ParticleGenerator.cpp
 			${PROJECT_SOURCE_DIR}/src/NGLSceneMouseControls.cpp	
-            ${PROJECT_SOURCE_DIR}/src/Constrain.cpp
+            ${PROJECT_SOURCE_DIR}/src/DistanceConstrain.cpp
             ${PROJECT_SOURCE_DIR}/include/SimulationSolver.h			
             ${PROJECT_SOURCE_DIR}/include/NGLScene.h
             ${PROJECT_SOURCE_DIR}/include/ParticleGenerator.h 
             ${PROJECT_SOURCE_DIR}/include/Constrain.h
+            ${PROJECT_SOURCE_DIR}/include/DistanceConstrain.h
 )
 
 target_link_libraries(${TargetName} PRIVATE Qt::Widgets Qt::OpenGL NGL)

@@ -74,7 +74,7 @@ void NGLScene::initializeGL()
 void NGLScene::timerEvent(QTimerEvent *_event)
 {
   //std::cout<<m_particleGenerator->get_particlePosition(2).m_y<<'\n';
-  PBD(m_particleGenerator,0.99,0.05,1);
+  PBD(m_particleGenerator,0.99,0.05,10);
   //std::cout<<m_particleGenerator->get_particlePosition(19).m_y<<'\n';
   
   //m_particleGenerator->update();
@@ -133,7 +133,7 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
     break;
   case Qt::Key_1 : 
     //std::cout<<"1111"<<'\n';
-    m_particleGenerator->set_particleExtForce(49,0.0f,-700.0f,100.0f);
+    m_particleGenerator->set_particleExtForce(49,0.0f,-700.0f,500.0f);
     break;
 
   default : break;
@@ -148,7 +148,7 @@ void NGLScene::keyReleaseEvent(QKeyEvent *_event)
   if (_event->key() == Qt::Key_1)
   {
     //std::cout<<"1111"<<'\n';
-    m_particleGenerator->set_particleExtForce(49,0.0f,700.0f,-100.0f);
+    m_particleGenerator->set_particleExtForce(49,0.0f,700.0f,-500.0f);
   }
 }
 

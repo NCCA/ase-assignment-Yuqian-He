@@ -3,9 +3,11 @@
 #include<iostream>
 #include"ParticleGenerator.h"
 #include"Constrain.h"
+#include "DistanceConstrain.h"
+#include <typeinfo>
 
-constrain c;
 const float delta_t=0.005;
+std::vector<std::shared_ptr<constrain>> test2;
 
 void dampVelocity(std::shared_ptr<particleGenerator> particle,float damp)
 {
@@ -28,46 +30,37 @@ void makeProposedPosition(std::shared_ptr<particleGenerator> particle)
 
 }
 
-void projectConstrain(std::shared_ptr<particleGenerator> particle,float d, size_t steps)
+void generateConstrain(std::vector<std::shared_ptr<constrain>> constrainTypes,std::vector<int> constrainType)
+{
+    for(int i=0;i<constrainType.size();++i)
+    {
+        if(constrainType[i] == 0)
+        {
+            //std::cout<<constrainType.size()<<'\n';
+            auto dc = std::make_shared<distanceConstrain>(0.8);
+            constrainTypes[i]=dc; 
+            
+        }
+    }
+    test2 = constrainTypes;
+}
+
+void projectConstrain(std::vector<std::shared_ptr<constrain>> constrainTypes,std::shared_ptr<particleGenerator> particle,float d, size_t steps)
 {
     
     for(int j=0;j<steps;++j)
     {
         for(int i=0; i<particle->get_numParticles()-1;++i)
         {
-            auto w1=(-particle->get_particleInverseMass(i)) / (particle->get_particleInverseMass(i)+particle->get_particleInverseMass(i+1));
-            auto w2=particle->get_particleInverseMass(i+1) / (particle->get_particleInverseMass(i)+particle->get_particleInverseMass(i+1));
-
-            ngl::Vec3 delta_p1;
-            ngl::Vec3 delta_p2;
-
-            auto p1=particle->get_particleProposedPosition(i);
-            auto p2=particle->get_particleProposedPosition(i+1);
-
-            float currentLength=sqrt(pow(p1.m_x-p2.m_x, 2)+pow(p1.m_y-p2.m_y,2)+pow(p1.m_z-p2.m_z,2));
-
-
-
-            auto s1 = w1* (currentLength-d)/currentLength;
-            auto s2 = w2* (currentLength-d)/currentLength;
-
-
-            delta_p1 = s1*(p1-p2)*0.9;
-            delta_p2 = s2*(p1-p2)*0.9;
-
-            
-
-            auto _x1 = particle->get_particleProposedPosition(i).m_x+delta_p1.m_x;
-            auto _y1 = particle->get_particleProposedPosition(i).m_y+delta_p1.m_y;
-            auto _z1 = particle->get_particleProposedPosition(i).m_z+delta_p1.m_z;
-
-            auto _x2 = particle->get_particleProposedPosition(i+1).m_x+delta_p2.m_x;
-            auto _y2 = particle->get_particleProposedPosition(i+1).m_y+delta_p2.m_y;
-            auto _z2 = particle->get_particleProposedPosition(i+1).m_z+delta_p2.m_z;
-
-            particle->set_particleProposedPosition(i,_x1,_y1,_z1);
-            particle->set_particleProposedPosition(i+1,_x2,_y2,_z2);
-          
+            //std::cout<<"!!!!"<<'\n';
+            //std::cout<<constrainTypes[0]->stiffness<<'\n';
+            for(int k=0;k<constrainTypes.size();++k)
+            {
+                std::cout<<i<<'\n';
+                constrainTypes[k].get()->projection(particle,i,d);
+                //std::cout<<typeid(constrainTypes[k]).name()<<'\n';
+                //std::cout<<constrainTypes[k]->stiffness<<'\n';
+            }
         }
     }
     
@@ -88,13 +81,17 @@ void finalizeUpdate(std::shared_ptr<particleGenerator> particle)
 
 void PBD(std::shared_ptr<particleGenerator> particle,float damp,float d,size_t steps)
 {
-    //std::cout<<particle->get_particleProposedPosition(19).m_y<<'\n';
+    //std::vector<std::shared_ptr<constrain>> constrainTypes;
+    std::vector<int> test = {0};
+    //constrainTypes.resize(test.size());
+    test2.resize(test.size());
+    generateConstrain(test2,test);
+    //constrainTypes=test2;
+    //std::cout<<constrainTypes[0]->stiffness<<'\n';
+    //std::cout<<typeid(constrainTypes[0]).name()<<'\n';
     dampVelocity(particle,damp);
     makeProposedPosition(particle);
-    //std::cout<<particle->get_particlePosition(2).m_y<<'\n';
-    //std::cout<<particle->get_particlePosition(1).m_y<<'\n';
-    std::cout<<particle->get_particleProposedPosition(19).m_y<<"!!!!!!"<<'\n';
-    projectConstrain(particle,d,steps);
+    projectConstrain(test2,particle,d,steps);
     finalizeUpdate(particle);
 
 }

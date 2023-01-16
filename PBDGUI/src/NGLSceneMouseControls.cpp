@@ -1,8 +1,6 @@
 #include "NGLScene.h"
-#include <iostream>
 #include <QMouseEvent>
 #include <QtGlobal>
-#include <QMatrix4x4>
 //----------------------------------------------------------------------------------------------------------------------
 void NGLScene::mouseMoveEvent(QMouseEvent *_event)
 {
@@ -14,27 +12,27 @@ void NGLScene::mouseMoveEvent(QMouseEvent *_event)
 #else
   auto position = _event->pos();
 #endif
-  // if (m_win.rotate && _event->buttons() == Qt::LeftButton)
-  // {
-  //   int diffx = position.x() - m_win.origX;
-  //   int diffy = position.y() - m_win.origY;
-  //   m_win.spinXFace += static_cast<int>(0.5f * diffy);
-  //   m_win.spinYFace += static_cast<int>(0.5f * diffx);
-  //   m_win.origX = position.x();
-  //   m_win.origY = position.y();
-  //   update();
-  // }
-  // // right mouse translate code
-  // else if (m_win.translate && _event->buttons() == Qt::RightButton)
-  // {
-  //   int diffX = static_cast<int>(position.x() - m_win.origXPos);
-  //   int diffY = static_cast<int>(position.y() - m_win.origYPos);
-  //   m_win.origXPos = position.x();
-  //   m_win.origYPos = position.y();
-  //   m_modelPos.m_x += INCREMENT * diffX;
-  //   m_modelPos.m_y -= INCREMENT * diffY;
-  //   update();
-  // }
+  if (m_win.rotate && _event->buttons() == Qt::LeftButton)
+  {
+    int diffx = position.x() - m_win.origX;
+    int diffy = position.y() - m_win.origY;
+    m_win.spinXFace += static_cast<int>(0.5f * diffy);
+    m_win.spinYFace += static_cast<int>(0.5f * diffx);
+    m_win.origX = position.x();
+    m_win.origY = position.y();
+    update();
+  }
+  // right mouse translate code
+  else if (m_win.translate && _event->buttons() == Qt::RightButton)
+  {
+    int diffX = static_cast<int>(position.x() - m_win.origXPos);
+    int diffY = static_cast<int>(position.y() - m_win.origYPos);
+    m_win.origXPos = position.x();
+    m_win.origYPos = position.y();
+    m_modelPos.m_x += INCREMENT * diffX;
+    m_modelPos.m_y -= INCREMENT * diffY;
+    update();
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -50,17 +48,16 @@ void NGLScene::mousePressEvent(QMouseEvent *_event)
 
   if (_event->button() == Qt::LeftButton)
   {
-    std::cout << "Mouse press at: (" << _event->pos().x() << ", " << _event->pos().y() << ")" << '\n';
-    // m_win.origX = position.x();
-    // m_win.origY = position.y();
-    // m_win.rotate = true;
+    m_win.origX = position.x();
+    m_win.origY = position.y();
+    m_win.rotate = true;
   }
   // right mouse translate mode
   else if (_event->button() == Qt::RightButton)
   {
-    // m_win.origXPos = position.x();
-    // m_win.origYPos = position.y();
-    // m_win.translate = true;
+    m_win.origXPos = position.x();
+    m_win.origYPos = position.y();
+    m_win.translate = true;
   }
 }
 

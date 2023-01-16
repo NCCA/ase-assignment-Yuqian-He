@@ -6,14 +6,13 @@
 #include<ngl/Vec4.h>
 #include<string_view>
 #include<ngl/MultiBufferVAO.h>
-#include <ngl/Mat4.h>
 
 
 
 class particleGenerator
 {
     public:
-    particleGenerator(size_t _numParticle,bool testFlag);
+    particleGenerator(size_t _numParticle);
     void initialParticle(size_t _numParticle);
     //accessor
     void set_particlePosition(size_t _index, float _x, float _y, float _z);
@@ -28,8 +27,6 @@ class particleGenerator
     void set_particleMass(size_t _index, size_t mass);
     float get_particleInverseMass(size_t _index);
     bool get_ifFixed(size_t _index);
-    void set_ifCollider(size_t _index, bool _ifCollider);
-    bool get_ifCollider(size_t _index);
 
     size_t get_numParticles() const;
     void render() const;
@@ -44,9 +41,6 @@ class particleGenerator
     std::vector<float> m_inverseMasses;
     std::vector<bool> m_ifFixeds;
     std::unique_ptr<ngl::MultiBufferVAO> m_vao;
-    bool m_testFlag=0;
-    std::vector<bool> isCollider;
-
 
 };
 

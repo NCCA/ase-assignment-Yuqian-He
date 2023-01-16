@@ -6,11 +6,8 @@
 #include "ParticleGenerator.h"
 #include <ngl/Mat4.h>
 #include <ngl/Text.h>
-#include <ngl/Obj.h>
-#include <deque>
-#include <ngl/Transformation.h>
 // this must be included after NGL includes else we get a clash with gl libs
-#include <QOpenGLWindow>
+#include <QOpenGLWidget>
 //----------------------------------------------------------------------------------------------------------------------
 /// @file NGLScene.h
 /// @brief this class inherits from the Qt OpenGLWindow and allows us to use NGL to draw OpenGL
@@ -24,7 +21,7 @@
 /// put in this file
 //----------------------------------------------------------------------------------------------------------------------
 
-class NGLScene : public QOpenGLWindow
+class NGLScene : public QOpenGLWidget
 {
   public:
     //----------------------------------------------------------------------------------------------------------------------
@@ -50,6 +47,8 @@ class NGLScene : public QOpenGLWindow
     //----------------------------------------------------------------------------------------------------------------------
     void resizeGL(int _w, int _h) override;
     void testAddForce();
+    void keyPressEvent(QKeyEvent *_event) override;
+    void keyReleaseEvent(QKeyEvent *_event) override;
 
 private:
 
@@ -57,8 +56,7 @@ private:
     /// @brief Qt Event called when a key is pressed
     /// @param [in] _event the Qt event to query for size etc
     //----------------------------------------------------------------------------------------------------------------------
-    void keyPressEvent(QKeyEvent *_event) override;
-    void keyReleaseEvent(QKeyEvent *_event) override;
+
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief this method is called every time a mouse is moved
     /// @param _event the Qt Event structure
@@ -84,7 +82,6 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     void wheelEvent( QWheelEvent *_event) override;
     void timerEvent(QTimerEvent *_event) override;
-    void get_normal();
     /// @brief windows parameters for mouse control etc.
     WinParams m_win;
     /// position for our model
@@ -93,18 +90,9 @@ private:
     ngl::Mat4 m_mouseGlobalTX;
     ngl::Mat4 m_view;
     ngl::Mat4 m_project;
-    std::unique_ptr<ngl::Text> m_text;
-    std::deque<long> m_updateTime;
-    std::deque<long> m_renderTime;
-    ngl::Vec3 m_aimPos={0,10,0};
-    ngl::Vec3 m_aimPosCollider={0,5,5};
-    ngl::Vec3 force;
-    int forceNum;
-    float damp;
-    int iterationStep;
-    std::shared_ptr<ngl::Obj> mesh;
-    ngl::Transformation cube_model;
 
+    std::unique_ptr<ngl::Text>m_text;
+    ngl::Vec3 m_aimPos={0,10,0};
 };
 
 

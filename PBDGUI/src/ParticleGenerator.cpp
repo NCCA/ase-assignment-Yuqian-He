@@ -10,10 +10,9 @@
 
 const float delta_t=0.005;
 
-particleGenerator::particleGenerator(size_t _numParticle, bool testFlag)
+particleGenerator::particleGenerator(size_t _numParticle)
 {
     initialParticle(_numParticle);
-    m_testFlag = testFlag;
 }
 
 void particleGenerator::initialParticle(size_t _numParticle)
@@ -32,7 +31,6 @@ void particleGenerator::initialParticle(size_t _numParticle)
         m_positions[i].set(0.0f,0.0f-j*0.05,0.0f);
         m_colours[i]=ngl::Random::getRandomColour3();
         m_ifFixeds[i]=false;
-        isCollider[i]=false;
         j++;
     }
     m_inverseMasses[0]=0;
@@ -44,11 +42,7 @@ void particleGenerator::initialParticle(size_t _numParticle)
     }
 
     m_vao = ngl::vaoFactoryCast<ngl::MultiBufferVAO>(ngl::VAOFactory::createVAO(ngl::multiBufferVAO,GL_LINES | GL_POINTS));
-    if(m_testFlag=0)
-    {
-        particleGenerator::paint(); 
-    }
-
+    particleGenerator::paint();
 }
 
 //write the set data for rendering
@@ -154,22 +148,16 @@ bool particleGenerator::get_ifFixed(size_t _index)
     return m_ifFixeds[_index];
 }
 
+
+
 size_t particleGenerator::get_numParticles() const
 {
     return m_positions.size();
 }
+
 
 void particleGenerator::render() const
 {
     particleGenerator::paint();
 }
 
-void particleGenerator::set_ifCollider(size_t _index, bool _ifCollider)
-{
-    isCollider[_index]=_ifCollider;
-}
-
-bool particleGenerator::get_ifCollider(size_t _index)
-{
-    return isCollider[_index];
-}

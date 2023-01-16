@@ -4,13 +4,10 @@
 #include"ParticleGenerator.h"
 #include"Constrain.h"
 #include "DistanceConstrain.h"
-#include "CollisionConstrain.h"
 #include <typeinfo>
-#include <ngl/Transformation.h>
 
 const float delta_t=0.005;
 std::vector<std::shared_ptr<constrain>> test2;
-float stiffness=0.2;
 
 void dampVelocity(std::shared_ptr<particleGenerator> particle,float damp)
 {
@@ -33,22 +30,15 @@ void makeProposedPosition(std::shared_ptr<particleGenerator> particle)
 
 }
 
-void generateConstrain(std::vector<std::shared_ptr<constrain>> constrainTypes,std::vector<int> constrainType,
-                        std::shared_ptr<ngl::Obj> mesh,ngl::Transformation cube_model,
-                        ngl::Mat4 m_mouseGlobalTX)
+void generateConstrain(std::vector<std::shared_ptr<constrain>> constrainTypes,std::vector<int> constrainType)
 {
     for(int i=0;i<constrainType.size();++i)
     {
         if(constrainType[i] == 0)
         {
-            auto dc = std::make_shared<distanceConstrain>(stiffness);
+            auto dc = std::make_shared<distanceConstrain>(0.8);
             constrainTypes[i]=dc; 
             
-        }
-        if(constrainType[i] == 1)
-        {
-            auto cc = std::make_shared<collisionConstrain>(mesh,cube_model,m_mouseGlobalTX);
-            constrainTypes[i]=cc; 
         }
     }
     test2 = constrainTypes;
@@ -83,26 +73,17 @@ void finalizeUpdate(std::shared_ptr<particleGenerator> particle)
     }
 }
 
-void PBD(std::shared_ptr<particleGenerator> particle,float damp,float d,
-        size_t steps,std::shared_ptr<ngl::Obj> mesh,ngl::Transformation cube_model,
-        ngl::Mat4 m_mouseGlobalTX)
+void PBD(std::shared_ptr<particleGenerator> particle,float damp,float d,size_t steps)
 {
 
-    std::vector<int> test = {0,1};
+    std::vector<int> test = {0};
     test2.resize(test.size());
-    generateConstrain(test2,test,mesh,cube_model,m_mouseGlobalTX);
+    generateConstrain(test2,test);
     dampVelocity(particle,damp);
     makeProposedPosition(particle);
     projectConstrain(test2,particle,d,steps);
     finalizeUpdate(particle);
 
-    std::cout<<particle->get_ifCollider(49)<<'\n';
-
-}
-
-float get_stiffness()
-{
-    return stiffness;
 }
 
 #endif

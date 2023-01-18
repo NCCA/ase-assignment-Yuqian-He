@@ -97,13 +97,14 @@ private:
     std::deque<long> m_updateTime;
     std::deque<long> m_renderTime;
     ngl::Vec3 m_aimPos={0,10,0};
-    ngl::Vec3 m_aimPosCollider={0,5,5};
+    ngl::Vec3 m_aimPosCollider={0,0,0};
     ngl::Vec3 force;
     int forceNum;
     float damp;
     int iterationStep;
     std::shared_ptr<ngl::Obj> mesh;
     ngl::Transformation cube_model;
+    ngl::Transformation particle_model;
 
 };
 

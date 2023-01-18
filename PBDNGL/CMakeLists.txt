@@ -66,9 +66,17 @@ target_sources(ParticleTest PRIVATE test/ParticleTest.cpp
                 ${PROJECT_SOURCE_DIR}/src/ParticleGenerator.cpp
                 ${PROJECT_SOURCE_DIR}/include/ParticleGenerator.h  
 )
+add_executable(ConstrainTest)
+target_sources(ParticleTest PRIVATE test/ConstrainTest.cpp
+                ${PROJECT_SOURCE_DIR}/src/CollisionConstrain.cpp
+                ${PROJECT_SOURCE_DIR}/include/Constrain.h  
+                ${PROJECT_SOURCE_DIR}/include/CollisionConstrain.h 
+)
 
 target_link_libraries(ParticleTest PRIVATE GTest::gtest GTest::gtest_main)
 gtest_discover_tests(ParticleTest)
+target_link_libraries(ConstrainTest PRIVATE GTest::gtest GTest::gtest_main)
+gtest_discover_tests(ConstrainTest)
 
 add_custom_target(${TargetName}CopyShaders ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory

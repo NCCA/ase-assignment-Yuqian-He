@@ -25,6 +25,8 @@ void particleGenerator::initialParticle(size_t _numParticle)
     m_velocities.resize(_numParticle);
     m_inverseMasses.resize(_numParticle);
     m_ifFixeds.resize(_numParticle);
+    isCollider.resize(_numParticle);
+    m_worldPosition.resize(_numParticle);
     
     int j=0;
     for(auto i=0; i<_numParticle;++i)
@@ -103,6 +105,17 @@ ngl::Vec3 particleGenerator::get_particlePosition(size_t _index)
     return m_positions[_index];
 }
 
+void particleGenerator::set_worldPosition(size_t _index, float _x, float _y, float _z)
+{
+
+    m_worldPosition[_index].set(_x, _y, _z);
+}
+
+ngl::Vec3 particleGenerator::get_worldPosition(size_t _index)
+{
+    return m_worldPosition[_index];
+}
+
 void particleGenerator::set_particleExtForce(size_t _index, float _x, float _y, float _z)
 {
     m_extForces[_index]+={_x, _y, _z};
@@ -167,6 +180,7 @@ void particleGenerator::render() const
 void particleGenerator::set_ifCollider(size_t _index, bool _ifCollider)
 {
     isCollider[_index]=_ifCollider;
+
 }
 
 bool particleGenerator::get_ifCollider(size_t _index)

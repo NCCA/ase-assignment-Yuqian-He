@@ -77,14 +77,19 @@ void NGLScene::initializeGL()
   ngl::VAOPrimitives::createLineGrid("floor",20,20,20);
   startTimer(10);
 
-  mesh = std::make_shared<ngl::Obj>("mesh/cube.obj");
+  mesh = std::make_shared<ngl::Obj>("mesh/grid.obj");
   mesh->createVAO();
 }
 
 void NGLScene::timerEvent(QTimerEvent *_event)
 {
-  PBD(m_particleGenerator,damp,0.05,iterationStep,mesh,cube_model,m_mouseGlobalTX);
-  
+  PBD(m_particleGenerator,damp,0.05,iterationStep,mesh,cube_model,m_mouseGlobalTX,particle_model);
+  //update particle world position
+  for(int i=0;i<m_particleGenerator->get_numParticles();++i)
+  {
+      auto p=m_mouseGlobalTX*particle_model.getMatrix() *m_particleGenerator->get_particleProposedPosition(i);
+      m_particleGenerator->set_worldPosition(i,p.m_x,p.m_y,p.m_z);
+  }
   //m_particleGenerator->update();
   update();
 }
@@ -104,10 +109,9 @@ void NGLScene::paintGL()
 
   //draw particle
   ngl::ShaderLib::use(ParticleShader);
-  ngl::Transformation tx;
-  tx.setPosition(m_aimPos);
-  tx.setScale(2.0f,2.0f,2.0f);
-  ngl::ShaderLib::setUniform("MVP",m_project * m_view  * m_mouseGlobalTX *tx.getMatrix());
+  particle_model.setPosition(m_aimPos);
+  particle_model.setScale(2.0f,2.0f,2.0f);
+  ngl::ShaderLib::setUniform("MVP",m_project * m_view  * m_mouseGlobalTX *particle_model.getMatrix());
   
   //m_text->renderText(10,680,"My Text is Here");
   auto renderBegin = std::chrono::steady_clock::now();

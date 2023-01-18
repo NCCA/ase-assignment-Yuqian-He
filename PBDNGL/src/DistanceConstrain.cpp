@@ -10,6 +10,7 @@ float distanceConstrain::get_stiffness()
 
 void distanceConstrain::projection(std::shared_ptr<particleGenerator> particle, size_t _index, float originalLength)
 {
+    if(_index == particle->get_numParticles()-1) return;
     auto w1=(-particle->get_particleInverseMass(_index)) / (particle->get_particleInverseMass(_index)+particle->get_particleInverseMass(_index+1));
     auto w2=particle->get_particleInverseMass(_index+1) / (particle->get_particleInverseMass(_index)+particle->get_particleInverseMass(_index+1));
 

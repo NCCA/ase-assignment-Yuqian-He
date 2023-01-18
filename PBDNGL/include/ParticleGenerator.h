@@ -18,6 +18,8 @@ class particleGenerator
     //accessor
     void set_particlePosition(size_t _index, float _x, float _y, float _z);
     ngl::Vec3 get_particlePosition(size_t _index);
+    void set_worldPosition(size_t _index, float _x, float _y, float _z);
+    ngl::Vec3 get_worldPosition(size_t _index);
     void set_particleExtForce(size_t _index, float _x, float _y, float _z);
     ngl::Vec3 get_particleExtForce(size_t _index);
     void set_particleProposedPosition(size_t _index,float _x, float _y, float _z);
@@ -46,6 +48,7 @@ class particleGenerator
     std::unique_ptr<ngl::MultiBufferVAO> m_vao;
     bool m_testFlag=0;
     std::vector<bool> isCollider;
+    std::vector<ngl::Vec3> m_worldPosition;
 
 
 };

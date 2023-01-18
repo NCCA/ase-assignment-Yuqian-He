@@ -83,7 +83,7 @@ void NGLScene::initializeGL()
 
 void NGLScene::timerEvent(QTimerEvent *_event)
 {
-  PBD(m_particleGenerator,damp,0.05,iterationStep,mesh,cube_model,m_mouseGlobalTX,particle_model);
+  PBD(m_particleGenerator,damp,0.05,iterationStep,mesh,cube_model,m_mouseGlobalTX);
   //update particle world position
   for(int i=0;i<m_particleGenerator->get_numParticles();++i)
   {

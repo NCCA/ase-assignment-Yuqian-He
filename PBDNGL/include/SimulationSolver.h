@@ -37,7 +37,7 @@ void makeProposedPosition(std::shared_ptr<particleGenerator> particle)
 
 void generateConstrain(std::vector<std::shared_ptr<constrain>> constrainTypes,std::vector<int> constrainType,
                         std::shared_ptr<ngl::Obj> mesh,ngl::Transformation cube_model,
-                        ngl::Mat4 m_mouseGlobalTX,ngl::Transformation particle_model)
+                        ngl::Mat4 m_mouseGlobalTX)
 {
     for(int i=0;i<constrainType.size();++i)
     {
@@ -97,12 +97,12 @@ void finalizeUpdate(std::shared_ptr<particleGenerator> particle)
 
 void PBD(std::shared_ptr<particleGenerator> particle,float damp,float d,
         size_t steps,std::shared_ptr<ngl::Obj> mesh,ngl::Transformation cube_model,
-        ngl::Mat4 m_mouseGlobalTX,ngl::Transformation particle_model)
+        ngl::Mat4 m_mouseGlobalTX)
 {
 
     std::vector<int> test = {0,1};
     test2.resize(test.size());
-    generateConstrain(test2,test,mesh,cube_model,m_mouseGlobalTX,particle_model);
+    generateConstrain(test2,test,mesh,cube_model,m_mouseGlobalTX);
     dampVelocity(particle,damp);
     makeProposedPosition(particle);
     projectConstrain(test2,particle,d,steps);

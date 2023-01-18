@@ -62,7 +62,7 @@ end
 ![](assets/Process%20Diagram%20.png)
 
 ### Class Diagrams
-![](assets/Class%20Design%20.png)
+![](assets/PBD.png)
 
 ## Reference
 M¨uller M., Heidelberger B., Hennix M. and Ratcliff J., April 2007. Position based dynamics. J. Vis. Comun. Image Represent., 18(2),109–118. https://www.sciencedirect.com/science/article/pii/S1047320307000065

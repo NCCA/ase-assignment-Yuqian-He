@@ -105,6 +105,7 @@ private:
     std::shared_ptr<ngl::Obj> mesh;
     ngl::Transformation cube_model;
     ngl::Transformation particle_model;
+    std::string colliderName;
 
 };
 

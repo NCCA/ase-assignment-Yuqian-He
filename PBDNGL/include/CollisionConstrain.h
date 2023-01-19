@@ -21,6 +21,7 @@ class collisionConstrain : public constrain
     std::vector<ngl::Vec3> vertex;
     std::vector<ngl::Face> face;
     float collisionStiffness;
+    float minDistance;
 };
 
 #endif

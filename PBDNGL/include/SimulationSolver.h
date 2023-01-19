@@ -12,7 +12,15 @@ const float delta_t=0.005;
 std::vector<std::shared_ptr<constrain>> test2;
 float stiffness=0.2;
 float collisionStiffness=0.9;
+float minDistance;
 
+// void setWorldPosition(std::shared_ptr<particleGenerator> particle)
+// {
+//     for(int i=0; i<particle->get_numParticles();++i)
+//     {
+//         particle->set_worldPosition(i);
+//     }
+// }
 
 void dampVelocity(std::shared_ptr<particleGenerator> particle,float damp)
 {
@@ -50,7 +58,8 @@ void generateConstrain(std::vector<std::shared_ptr<constrain>> constrainTypes,st
         if(constrainType[i] == 1)
         {
             auto cc = std::make_shared<collisionConstrain>(mesh,cube_model,m_mouseGlobalTX,collisionStiffness);
-            constrainTypes[i]=cc; 
+            constrainTypes[i]=cc;
+            //minDistance=cc->get_minDistance();
         }
     }
     test2 = constrainTypes;
@@ -80,7 +89,7 @@ void finalizeUpdate(std::shared_ptr<particleGenerator> particle)
         if(particle->get_ifCollider(i)==true)
         {
             //std::cout<<"!!!!!"<<'\n';
-            auto move=(-particle->get_particleVelocity(i))*0.008*collisionStiffness;
+            auto move=(-particle->get_particleVelocity(i))*0.02;
             particle->set_particleVelocity(i,0,0,0);
             auto proPosition=particle->get_particleProposedPosition(i)+move;
             particle->set_particleProposedPosition(i,proPosition.m_x,proPosition.m_y,proPosition.m_z);
@@ -99,7 +108,6 @@ void PBD(std::shared_ptr<particleGenerator> particle,float damp,float d,
         size_t steps,std::shared_ptr<ngl::Obj> mesh,ngl::Transformation cube_model,
         ngl::Mat4 m_mouseGlobalTX)
 {
-
     std::vector<int> test = {0,1};
     test2.resize(test.size());
     generateConstrain(test2,test,mesh,cube_model,m_mouseGlobalTX);
@@ -107,7 +115,7 @@ void PBD(std::shared_ptr<particleGenerator> particle,float damp,float d,
     makeProposedPosition(particle);
     projectConstrain(test2,particle,d,steps);
     finalizeUpdate(particle);
-
+    //setWorldPosition(particle);
 }
 
 float get_stiffness()

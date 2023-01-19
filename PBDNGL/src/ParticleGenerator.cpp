@@ -10,10 +10,12 @@
 
 const float delta_t=0.005;
 
-particleGenerator::particleGenerator(size_t _numParticle, bool testFlag)
+particleGenerator::particleGenerator(size_t _numParticle, bool testFlag,ngl::Mat4 _mouseGlobalTX,ngl::Transformation _particle_model)
 {
     initialParticle(_numParticle);
     m_testFlag = testFlag;
+    m_mouseGlobalTX=_mouseGlobalTX;
+    particle_model=_particle_model;
 }
 
 void particleGenerator::initialParticle(size_t _numParticle)
@@ -49,6 +51,12 @@ void particleGenerator::initialParticle(size_t _numParticle)
     if(m_testFlag=0)
     {
         particleGenerator::paint(); 
+    }
+
+    //initial world position
+    for(auto i=0; i<_numParticle;++i)
+    {
+        m_worldPosition[i]=m_mouseGlobalTX*particle_model.getMatrix()*m_positions[i];
     }
 
 }
@@ -105,10 +113,10 @@ ngl::Vec3 particleGenerator::get_particlePosition(size_t _index)
     return m_positions[_index];
 }
 
-void particleGenerator::set_worldPosition(size_t _index, float _x, float _y, float _z)
+void particleGenerator::set_worldPosition(size_t _index,float _x, float _y, float _z)
 {
-
-    m_worldPosition[_index].set(_x, _y, _z);
+   //m_worldPosition[_index]=m_mouseGlobalTX*particle_model.getMatrix()*m_positions[_index];
+   m_worldPosition[_index].set(_x, _y, _z);
 }
 
 ngl::Vec3 particleGenerator::get_worldPosition(size_t _index)

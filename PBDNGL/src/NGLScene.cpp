@@ -53,9 +53,9 @@ void NGLScene::initializeGL()
   // enable multisampling for smoother drawing
   glEnable(GL_MULTISAMPLE);
  
-  m_particleGenerator=std::make_unique<particleGenerator>(50,0);
+  m_particleGenerator=std::make_unique<particleGenerator>(50,0,m_mouseGlobalTX,particle_model);
   
-  std::cout<<m_particleGenerator->get_particleInverseMass(2)<<'\n';
+  //std::cout<<m_particleGenerator->get_particleInverseMass(2)<<'\n';
 
   //the basic color and shader
   ngl::ShaderLib::use(ngl::nglColourShader);
@@ -76,26 +76,28 @@ void NGLScene::initializeGL()
   //create the floor
   ngl::VAOPrimitives::createLineGrid("floor",20,20,20);
   startTimer(10);
-
-  mesh = std::make_shared<ngl::Obj>("mesh/grid.obj");
+  colliderName="mesh/cube.obj";
+  mesh = std::make_shared<ngl::Obj>(colliderName);
   mesh->createVAO();
+
 }
 
 void NGLScene::timerEvent(QTimerEvent *_event)
 {
-  PBD(m_particleGenerator,damp,0.05,iterationStep,mesh,cube_model,m_mouseGlobalTX);
-  //update particle world position
+    //update particle world position
   for(int i=0;i<m_particleGenerator->get_numParticles();++i)
   {
       auto p=m_mouseGlobalTX*particle_model.getMatrix() *m_particleGenerator->get_particleProposedPosition(i);
       m_particleGenerator->set_worldPosition(i,p.m_x,p.m_y,p.m_z);
   }
-  //m_particleGenerator->update();
+  PBD(m_particleGenerator,damp,0.05,iterationStep,mesh,cube_model,m_mouseGlobalTX);
+
   update();
 }
 
 void NGLScene::paintGL()
 {
+    std::cout<<colliderName<<'\n';
   // clear the screen and depth buffer
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glViewport(0,0,m_win.width,m_win.height);
@@ -153,6 +155,11 @@ void NGLScene::paintGL()
   ngl::ShaderLib::setUniform("MVP",m_project * m_view  * m_mouseGlobalTX *cube_model.getMatrix());
   mesh->draw();
 
+  //draw collider
+  mesh = std::make_shared<ngl::Obj>(colliderName);
+  mesh->createVAO();
+
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -174,7 +181,7 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
     m_win.spinYFace = 0;
     m_modelPos.set(ngl::Vec3::zero());
     break;
-  case Qt::Key_1 : 
+  case Qt::Key_F : 
     //std::cout<<"1111"<<'\n';
     m_particleGenerator->set_particleExtForce(forceNum,force.m_x,force.m_y,force.m_z);
     break;
@@ -197,6 +204,19 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
   case Qt::Key_S:
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   break;
+  //change the collider
+  case Qt::Key_1:
+    colliderName="mesh/cube.obj";
+  break;
+  case Qt::Key_2:
+    colliderName="mesh/Cone.obj";
+  break;
+  case Qt::Key_3:
+    colliderName="mesh/Cylinder.obj";
+  break;
+  case Qt::Key_4:
+    colliderName="mesh/grid.obj";
+  break;
 
   default : break;
   }
@@ -207,11 +227,27 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
 
 void NGLScene::keyReleaseEvent(QKeyEvent *_event)
 {
-  if (_event->key() == Qt::Key_1)
+  if (_event->key() == Qt::Key_F)
   {
     //std::cout<<"1111"<<'\n';
     m_particleGenerator->set_particleExtForce(forceNum,force.m_x,-force.m_y,-force.m_z);
 
+  }
+  else if(_event->key() == Qt::Key_1)
+  {
+    colliderName="mesh/cube.obj";
+  }
+    else if(_event->key() == Qt::Key_2)
+  {
+    colliderName="mesh/Cone.obj";
+  }
+    else if(_event->key() == Qt::Key_3)
+  {
+    colliderName="mesh/Cylinder.obj";
+  }
+    else if(_event->key() == Qt::Key_4)
+  {
+    colliderName="mesh/grid.obj";
   }
 }
 

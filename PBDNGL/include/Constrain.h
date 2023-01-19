@@ -7,6 +7,7 @@ class constrain
 {
     public:
     virtual void projection(std::shared_ptr<particleGenerator> particle, size_t _index, float originalLength){};
+
 };
 
 

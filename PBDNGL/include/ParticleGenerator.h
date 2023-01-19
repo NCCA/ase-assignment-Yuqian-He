@@ -7,18 +7,20 @@
 #include<string_view>
 #include<ngl/MultiBufferVAO.h>
 #include <ngl/Mat4.h>
+#include <ngl/Transformation.h>
+#include <ngl/Mat4.h>
 
 
 
 class particleGenerator
 {
     public:
-    particleGenerator(size_t _numParticle,bool testFlag);
+    particleGenerator(size_t _numParticle,bool testFlag,ngl::Mat4 _mouseGlobalTX,ngl::Transformation _particle_model);
     void initialParticle(size_t _numParticle);
     //accessor
     void set_particlePosition(size_t _index, float _x, float _y, float _z);
     ngl::Vec3 get_particlePosition(size_t _index);
-    void set_worldPosition(size_t _index, float _x, float _y, float _z);
+    void set_worldPosition(size_t _index,float _x, float _y, float _z);
     ngl::Vec3 get_worldPosition(size_t _index);
     void set_particleExtForce(size_t _index, float _x, float _y, float _z);
     ngl::Vec3 get_particleExtForce(size_t _index);
@@ -49,6 +51,8 @@ class particleGenerator
     bool m_testFlag=0;
     std::vector<bool> isCollider;
     std::vector<ngl::Vec3> m_worldPosition;
+    ngl::Mat4 m_mouseGlobalTX;
+    ngl::Transformation particle_model;
 
 
 };

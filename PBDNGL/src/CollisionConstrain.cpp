@@ -11,7 +11,7 @@ collisionConstrain::collisionConstrain(std::shared_ptr<ngl::Obj> _mesh,ngl::Tran
     collisionStiffness=_collisionStiffness;
     //get the facelist
     face=mesh->getFaceList();
-    normal.resize(face.size()/2);
+    normal.resize(face.size());
     m_objCollider.resize(normal.size());
     //get the vertex list in object space
     vertex=mesh->getVertexList();
@@ -47,19 +47,36 @@ void collisionConstrain::projection(std::shared_ptr<particleGenerator> particle,
     ngl::Real detection;
     //collision detection
     auto count=0;
-    for(int i=0;i<face.size()/2;++i)
+    minDistance=0;
+    auto num=0;
+    for(int i=0;i<face.size();++i)
     {
         direction=particle->get_worldPosition(_index)-vertex[face[i].m_vert[0]];
         detection=direction.dot(normal[i]);
         //std::cout<<detection<<'\n';
-        if(detection<0.2)
+        if(detection<0.02)
         {
             m_objCollider[i]=true;
             count++;
         }
     }
+    //calculate which surface is closer to the particle
+    for(int i=0;i<normal.size();++i)
+    {
+        auto p1=(particle->get_worldPosition(_index)-vertex[face[i].m_vert[0]]).dot(normal[i]);
+        if(i==0){minDistance=-p1;}
+        else
+        {
+            if(minDistance>-p1)
+            {
+                minDistance=-p1;
+                num=i;
+            }
+        }
+    }
     if(count==m_objCollider.size())
     {
+        //std::cout<<particle->get_worldPosition(_index).m_y<<'\n';
         particle->set_ifCollider(_index,true);
     }else
     {
@@ -68,6 +85,8 @@ void collisionConstrain::projection(std::shared_ptr<particleGenerator> particle,
 
     if(particle->get_ifCollider(_index)==true)
     {
-        particle->set_particleVelocity(_index,-normal[0].m_x,-normal[0].m_y,-normal[0].m_z);
+        //std::cout<<"!!!!!!!"<<'\n';
+
+        particle->set_particleVelocity(_index,-normal[num].m_x,-normal[num].m_y,-normal[num].m_z);
     }
 }

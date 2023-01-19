@@ -64,7 +64,10 @@ include_directories(include)
 add_executable(ParticleTest)
 target_sources(ParticleTest PRIVATE test/ParticleTest.cpp
                 ${PROJECT_SOURCE_DIR}/src/ParticleGenerator.cpp
-                ${PROJECT_SOURCE_DIR}/include/ParticleGenerator.h  
+                ${PROJECT_SOURCE_DIR}/include/ParticleGenerator.h
+                ${PROJECT_SOURCE_DIR}/src/CollisionConstrain.cpp
+                ${PROJECT_SOURCE_DIR}/include/Constrain.h  
+                ${PROJECT_SOURCE_DIR}/include/CollisionConstrain.h   
 )
 add_executable(ConstrainTest)
 target_sources(ParticleTest PRIVATE test/ConstrainTest.cpp

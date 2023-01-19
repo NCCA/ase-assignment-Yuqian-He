@@ -1,10 +1,11 @@
 #include<iostream>
-#include"CollisionConstrian.h"
+#include<gtest/gtest.h>
+#include"CollisionConstrain.h"
 #include"Constrain.h"
 #include"DistanceConstrain.h"
 
 TEST(collisionConstrain,construct)
 {
-    collisionConstrain cc;
+   collisionConstrain cc;
     
 }

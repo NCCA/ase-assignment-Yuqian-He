@@ -16,8 +16,11 @@ I have established a constraint class which serves as a parent class for various
 The simulation solver is the core component of my code, it takes an array of particles and constraints as input in order to adjust the positions of the particles. The functions that I have written include: dampVelocity(), generateConstraint(), makeProposedPosition(), projectConstraint(), finalizeUpdate(). These functions work together to simulate realistic motion and behavior of particles. My approach to the design of the simulation solver is consistent with my initial design, as outlined above.
 
 # result
+Implement distance constraint. Press F to give it the force.
 ![](./../assets/distance%20constraint.gif)
+Implement distance constraint & collision constraint. Press arrows to control the collider plane.
 ![](./../assets/collision%20constraint.gif)
+Add different colliders as tests. Press 1 is cube. Press 2 is cone. Press 3 is cylinder. Press 4 is grid.
 # Building
 
 ```

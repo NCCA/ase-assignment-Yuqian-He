@@ -90,6 +90,7 @@ private:
     /// position for our model
     ngl::Vec3 m_modelPos;
     std::shared_ptr<particleGenerator> m_particleGenerator;
+    std::vector<std::shared_ptr<particleGenerator>> pArray;
     ngl::Mat4 m_mouseGlobalTX;
     ngl::Mat4 m_view;
     ngl::Mat4 m_project;
@@ -97,7 +98,7 @@ private:
     std::deque<long> m_updateTime;
     std::deque<long> m_renderTime;
     ngl::Vec3 m_aimPos={0,10,0};
-    ngl::Vec3 m_aimPosCollider={0,0,0};
+    ngl::Vec3 m_aimPosCollider={1,0,0};
     ngl::Vec3 force;
     int forceNum;
     float damp;

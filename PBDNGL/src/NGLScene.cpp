@@ -21,7 +21,7 @@ NGLScene::NGLScene()
   force.set(0.0f,700.0f,600.0f);
   forceNum = 30;
   damp = 0.99;
-  iterationStep = 50;
+  iterationStep = 100;
 }
 
 
@@ -54,8 +54,7 @@ void NGLScene::initializeGL()
   glEnable(GL_MULTISAMPLE);
  
   m_particleGenerator=std::make_unique<particleGenerator>(50,0,m_mouseGlobalTX,particle_model);
-  
-  //std::cout<<m_particleGenerator->get_particleInverseMass(2)<<'\n';
+  pArray.push_back(m_particleGenerator);
 
   //the basic color and shader
   ngl::ShaderLib::use(ngl::nglColourShader);
@@ -84,20 +83,24 @@ void NGLScene::initializeGL()
 
 void NGLScene::timerEvent(QTimerEvent *_event)
 {
-    //update particle world position
-  for(int i=0;i<m_particleGenerator->get_numParticles();++i)
+  for(int j=0;j<pArray.size();++j)
   {
-      auto p=m_mouseGlobalTX*particle_model.getMatrix() *m_particleGenerator->get_particleProposedPosition(i);
-      m_particleGenerator->set_worldPosition(i,p.m_x,p.m_y,p.m_z);
-  }
-  PBD(m_particleGenerator,damp,0.05,iterationStep,mesh,cube_model,m_mouseGlobalTX);
+    //update particle world position
+    for(int i=0;i<pArray[j]->get_numParticles();++i)
+    {
+        auto p=m_mouseGlobalTX*particle_model.getMatrix() *pArray[j]->get_particleProposedPosition(i);
+        pArray[j]->set_worldPosition(i,p.m_x,p.m_y,p.m_z);
+    }
+    PBD(pArray[j],damp,0.05,iterationStep,mesh,cube_model,m_mouseGlobalTX);
 
-  update();
+  }
+    update();
+
 }
 
 void NGLScene::paintGL()
 {
-    std::cout<<colliderName<<'\n';
+  std::cout<<pArray.size()<<'\n';
   // clear the screen and depth buffer
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glViewport(0,0,m_win.width,m_win.height);
@@ -109,24 +112,29 @@ void NGLScene::paintGL()
   m_mouseGlobalTX.m_m[3][1]=m_modelPos.m_y;
   m_mouseGlobalTX.m_m[3][2]=m_modelPos.m_z;
 
-  //draw particle
-  ngl::ShaderLib::use(ParticleShader);
-  particle_model.setPosition(m_aimPos);
-  particle_model.setScale(2.0f,2.0f,2.0f);
-  ngl::ShaderLib::setUniform("MVP",m_project * m_view  * m_mouseGlobalTX *particle_model.getMatrix());
-  
   //m_text->renderText(10,680,"My Text is Here");
   auto renderBegin = std::chrono::steady_clock::now();
-  m_particleGenerator->render();
+   for(int j=0;j<pArray.size();++j)
+  {
+    //draw particle
+    ngl::ShaderLib::use(ParticleShader);
+    m_aimPos+={0.1,0.0f,0.0f};
+    particle_model.setPosition(m_aimPos);
+    particle_model.setScale(2.0f,2.0f,2.0f);
+    ngl::ShaderLib::setUniform("MVP",m_project * m_view  * m_mouseGlobalTX *particle_model.getMatrix());
+
+    pArray[j]->render();
+  }
+  m_aimPos.set(0,10,0);
   auto renderEnd = std::chrono::steady_clock::now();
-  auto text=fmt::format("Number of particles: {} ",m_particleGenerator->get_numParticles());
+  auto text=fmt::format("Number of particles: {} ",pArray[0]->get_numParticles());
   m_text->renderText(10,700,text);
   m_renderTime.push_back(std::chrono::duration_cast<std::chrono::microseconds>(renderEnd-renderBegin).count());
 
   text=fmt::format("Draw took: {} uS",std::accumulate(std::begin(m_renderTime), std::end(m_renderTime), 0) / m_renderTime.size());
   m_text->renderText(10,680,text);
 
-  text=fmt::format("Particle force: ({},{},{})",m_particleGenerator->get_particleExtForce(forceNum).m_x,m_particleGenerator->get_particleExtForce(forceNum).m_y,m_particleGenerator->get_particleExtForce(forceNum).m_z);
+  text=fmt::format("Particle force: ({},{},{})",pArray[0]->get_particleExtForce(forceNum).m_x,pArray[0]->get_particleExtForce(forceNum).m_y,pArray[0]->get_particleExtForce(forceNum).m_z);
   m_text->renderText(10,640,text);
 
   auto updateTime = std::accumulate(std::begin(m_updateTime), std::end(m_updateTime), 0) / m_updateTime.size();
@@ -141,7 +149,9 @@ void NGLScene::paintGL()
   text=fmt::format("stiffness: {} ",get_stiffness());
   m_text->renderText(10,580,text);
 
-
+  text=fmt::format("Number of rope: {} ",pArray.size());
+  m_text->renderText(10,560,text);
+  
   //draw floor
   ngl::ShaderLib::use(ngl::nglColourShader);
   ngl::ShaderLib::setUniform("MVP",m_project * m_view * m_mouseGlobalTX);
@@ -151,7 +161,7 @@ void NGLScene::paintGL()
   //draw collider
   //ngl::Transformation t;
   cube_model.setPosition(m_aimPosCollider);
-  cube_model.setScale(1.0f,1.0f,1.0f);
+  cube_model.setScale(2.0f,2.0f,2.0f);
   ngl::ShaderLib::setUniform("MVP",m_project * m_view  * m_mouseGlobalTX *cube_model.getMatrix());
   mesh->draw();
 
@@ -183,7 +193,10 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
     break;
   case Qt::Key_F : 
     //std::cout<<"1111"<<'\n';
-    m_particleGenerator->set_particleExtForce(forceNum,force.m_x,force.m_y,force.m_z);
+    for(int i=0;i<pArray.size();++i)
+    {
+      pArray[i]->set_particleExtForce(forceNum,force.m_x,force.m_y,force.m_z);
+    }
     break;
   case  Qt::Key_Right:
     m_aimPosCollider+={0.0f,0.0f,-0.1f};
@@ -217,6 +230,10 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
   case Qt::Key_4:
     colliderName="mesh/grid.obj";
   break;
+  case Qt::Key_0:
+    m_particleGenerator=std::make_unique<particleGenerator>(50,0,m_mouseGlobalTX,particle_model);
+    pArray.push_back(m_particleGenerator);
+  break;
 
   default : break;
   }
@@ -229,8 +246,10 @@ void NGLScene::keyReleaseEvent(QKeyEvent *_event)
 {
   if (_event->key() == Qt::Key_F)
   {
-    //std::cout<<"1111"<<'\n';
-    m_particleGenerator->set_particleExtForce(forceNum,force.m_x,-force.m_y,-force.m_z);
+    for(int i=0;i<pArray.size();++i)
+    {
+      pArray[i]->set_particleExtForce(forceNum,-force.m_x,-force.m_y,-force.m_z);
+    }
 
   }
   else if(_event->key() == Qt::Key_1)

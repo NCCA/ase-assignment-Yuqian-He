@@ -18,9 +18,16 @@ The simulation solver is the core component of my code, it takes an array of par
 # result
 Implement distance constraint. Press F to give it the force.
 ![](./../assets/distance%20constraint.gif)
+
 Implement distance constraint & collision constraint. Press arrows to control the collider plane.
 ![](./../assets/collision%20constraint.gif)
-Add different colliders as tests. Press 1 is cube. Press 2 is cone. Press 3 is cylinder. Press 4 is grid.
+
+Add different colliders as tests. Press 1 is cube. Press 2 is cone. Press 3 is cylinder. Press 4 is grid. Some problems happened when I use complex geometry.
+![](./../assets/colliders.GIF)
+
+Press 0 to add more ropes. This project cannot simulate well when ropes' number are over 20, I didn't fix this problem because out of time.
+![](./../assets/ropes.GIF)
+
 # Building
 
 ```
